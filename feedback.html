@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+        <link rel="stylesheet" type="text/css" href="static/css/page.css" />
+        <title>XMeet</title>
+    </head>
+    <body>
+        <div class="head">
+            <div class="row">
+                <div class="col-2">
+                    <a class="logo"><span class="hexagon">XPro</span> &nbsp;&nbsp;|  <img src="static/images/logo.png"/></a>
+                </div>
+                <div class="col-9"></div>
+                <div class="col-1">
+                    <span class="online"></span>
+                    <span class="avatar ml-5 mt-5"><img width="40" height="40" src="static/images/default-avatar.png"/></span>
+                    <span class="menu ml-10 mt-10"><img width="30" height="30" src="static/images/bars.svg"/></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="menus">
+            <ul>
+                <li><a href="index.html"><i class="icon i-home"></i>首页</a></li>
+            </ul>
+        </div>
+
+        <div class="banner row">
+            <div class="banner-item item1 item2">
+                <br><br><br><br>
+
+                <section id="call_to_action">
+                    <header>
+                        <h4>
+                            您的反馈将帮助我们做的更好
+                        </h4>
+                    </header>
+                    <footer>
+                        <p>
+                            <input type="text" placeholder="您的email"/>
+                        </p>
+                        <p>
+                            <textarea></textarea>
+                        </p>
+                        <a class="btn" data-toggle="modal" href="#free_course_modal">
+                            确定
+                        </a>
+                    </footer>
+                </section>
+
+            </div>
+        </div>
+
+
+        	
+		<div class="foot">
+			<div class="row">
+				<div class="col-6 text-center">关注我们 <a href="#"><i class="icon i-weixin"></i></a> <a href="#"><i class="icon i-weibo"></i></a></div>
+				<div class="col-6 text-center"><a href="http://www.miitbeian.gov.cn/" target="_blank">黔ICP备15000690号-1</a>  |  © xpro 2015 <span class="logo">XMeet</span></div>
+			</div>
+		</div>
+		
+		<script src="static/js/jquery-2.1.3.js">
+        <script type="text/javascript" src="http://meet.xpro.im/js/XMeet.js"></script>
+		<script type="text/javascript">
+			$('.menu').on('mouseenter', function (e) {
+                $('.menus').css({right: 0});
+            });
+
+            $('.menus').on('mouseleave', function(e){
+                $('.menus').css({right: -200});
+            });
+		</script>
+    </body>
+</html>

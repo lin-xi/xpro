@@ -1,0 +1,152 @@
+<style>
+	.xmeet-logo{ 
+		/*position:relative; border:1px #ccc solid;*/
+		width: 500px;
+		height: 300px;
+		-webkit-transform: scale(0.3);
+	}
+	
+	.xmeet-logo .tail{
+		position:absolute;
+		left: 35px; top:100px;
+		width: 150px; height:100px;
+		-webkit-transform-origin: 100% 50%;
+		/*-webkit-animation: tailShake 3s linear 2s;*/
+	}
+	.xmeet-logo .tail .sr{
+		position:absolute;
+		left: 0px; top:0px;
+		width:100px; height:100px; 
+		border-radius:100%;
+		background: #00F;
+	}
+	.xmeet-logo .tail .sr-tri{
+		position: absolute;
+		left: 50px;
+		top:0;
+		background: #00F;
+		width: 50px;
+		height: 50px;
+		-webkit-transform: rotate(45deg);
+		-webkit-transform-origin: 0 100%;
+	}
+	
+	.xmeet-logo .tail .sr .mask{
+		position:absolute;
+		left: 25px; top:25px;
+		width:50px; height:50px; 
+		border-radius:100%;
+		background: #fff;
+		z-index: 10;
+	}
+	.xmeet-logo .tail .sr .mask-tri{
+		position: absolute;
+		left: 50px;
+		top: 25px;
+		background: #fff;
+		width: 25px;
+		height: 25px;
+		-webkit-transform: rotate(45deg);
+		-webkit-transform-origin: 0 100%;
+		z-index: 10;
+	}
+	
+	.xmeet-logo .body{
+		position:absolute;
+		left: 185px; top:0px;
+	}
+	.xmeet-logo .body .br{
+		position:absolute;
+		left: 0; top:0;
+		width:300px; height:300px; 
+		border-radius:100%;
+		background: #00F;
+	}
+	.xmeet-logo .body .br-tri{
+		position: absolute;
+		left: 0;
+		top: 0;
+		background: #00F;
+		width: 150px;
+		height: 150px;
+		-webkit-transform: rotate(-45deg);
+		-webkit-transform-origin: 100% 100%;
+	}
+	.xmeet-logo .body .br .mask{
+		position:absolute;
+		left: 25px; top:25px;
+		width:250px; height:250px; 
+		border-radius:100%;
+		background: #fff;
+		z-index: 9;
+	}
+	.xmeet-logo .body .br .mask-tri{
+		position: absolute;
+		left: 25px;
+		top: 25px;
+		background: #fff;
+		width: 125px;
+		height: 125px;
+		-webkit-transform: rotate(-45deg);
+		-webkit-transform-origin: 100% 100%;
+		z-index: 9;
+	}
+	.xmeet-logo .body .eye-left{
+		width: 40px; height:40px;
+		border-radius:100%;
+		position: absolute;
+		left: 80px;
+		top: 100px;
+		background: #00F;
+		z-index: 10;
+	}
+	.xmeet-logo .body .eye-right{
+		width: 40px; height:40px;
+		border-radius:100%;
+		position: absolute;
+		left: 180px;
+		top: 100px;
+		background: #00F;
+		z-index: 10;
+	}
+	
+	@-webkit-keyframes tailShake{
+		0%{
+			-webkit-transform: rotate(0deg);
+		}
+		25%{
+			-webkit-transform: rotate(6deg);
+		}
+		50%{
+			-webkit-transform: rotate(0deg);
+		}
+		75%{
+			-webkit-transform: rotate(-6deg);
+		} 	
+		100%{
+			-webkit-transform: rotate(0deg);
+		}
+	}
+	
+</style>
+
+<div class="xmeet-logo">
+	<div class="tail">
+		<div class="sr">
+			<div class="mask"></div>
+			<div class="mask-tri"></div>
+		</div>
+		<div class="sr-tri"></div>
+	</div>
+	<div class="body">
+		<div class="br">
+			<div class="mask"></div>
+			<div class="mask-tri"></div>
+			
+			<div class="eye-left"></div>
+			<div class="eye-right"></div>
+		</div>
+		<div class="br-tri"></div>
+	</div>
+	
+</div>
