@@ -1,0 +1,134 @@
+.so-scroller {
+	margin-top: 3em;
+	overflow: hidden;
+}
+
+.so-section {
+	margin-bottom: 15em;
+}
+
+/* Clear floats of children */
+.so-section:before,
+.so-section:after {
+	content: " ";
+	display: table;
+}
+
+.so-section:after {
+	clear: both;
+}
+
+/* Text styling */
+.so-section h2 {
+	font-size: 5em;
+	font-weight: 300;
+	line-height: 1;
+}
+
+.so-section p {
+	font-size: 2em;
+	font-weight: 300;
+}
+
+/* Sides */
+.so-side {
+	width: 50%;
+	float: left;
+	margin: 0;
+	padding: 3em 4%;
+	overflow: hidden;
+	min-height: 12em;
+	-webkit-transition: -webkit-transform 0.5s, opacity 0.5s;
+	-moz-transition: -moz-transform 0.5s, opacity 0.5s;
+	transition: transform 0.5s, opacity 0.5s;
+}
+
+/* Clear floats of children */
+.so-side:before,
+.so-side:after {
+	content: " ";
+	display: table;
+}
+
+.so-side:after {
+	clear: both;
+}
+
+.so-side-right {
+	text-align: left;
+}
+
+.so-side-left {
+	text-align: right;
+}
+
+.so-side-right img {
+	float: left;
+}
+
+.so-side-left img {
+	float: right;
+}
+
+/* Initial state (hidden or anything else) */
+.so-init .so-side {
+	opacity: 0;
+}
+
+.so-init .so-side-left {
+	-webkit-transform: translateX(-80px);
+	-moz-transform: translateX(-80px);
+	transform: translateX(-80px);
+}
+
+.so-init .so-side-right {
+	-webkit-transform: translateX(80px);
+	-moz-transform: translateX(80px);
+	transform: translateX(80px);
+}
+
+/* Animated state */
+/* add you final states (transition) or your effects (animations) for each side */
+.so-section.so-animate .so-side-left,
+.so-section.so-animate .so-side-right {
+	-webkit-transform: translateX(0px);
+	-moz-transform: translateX(0px);
+	transform: translateX(0px);
+	opacity: 1;
+}
+
+/* For example, add a delay for the right side:
+.so-section.so-animate .so-side-right {
+	-webkit-transition-delay: 0.2s;
+	-moz-transition-delay: 0.2s;
+	transition-delay: 0.2s;
+}
+*/
+
+/* Example media queries */
+
+@media screen and (max-width: 73.5em) {
+	.so-scroller {
+		font-size: 65%;
+	}
+
+	.so-section h2 {
+		margin: 0;
+	}
+
+	.so-side img {
+		max-width: 120%;
+	}
+}
+
+@media screen and (max-width: 41.125em) {
+	.so-side {
+		float: none;
+		width: 100%;
+	}
+
+	.so-side img {
+		max-width: 100%;
+	}
+}
+

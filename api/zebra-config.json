@@ -1,0 +1,22 @@
+{
+    "base": "./src",
+    "output": "./",
+    "rules": {
+	    "js": {
+	    	"compile": true,
+	    	"uglify": true,
+	    	"copy": true,
+			"pack": {
+				"xmeet.api.js": [
+					"_.js",
+					"api.js",
+					"TweenLite.min.js",
+					"md5.js",
+					"SocketChat.js",
+					"chat.js",
+					"ChatWindow.js"
+				]
+			}
+	    }
+	}
+}

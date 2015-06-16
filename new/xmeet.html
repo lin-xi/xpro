@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)https://leancloud.cn/?ver=silver -->
+<html class=" js csstransforms3d csstransitions">
+<!--<![endif]--><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}
+</style>
+  <title>LeanCloud</title>
+<meta charset="utf-8">
+
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+<meta property="wb:webmaster" content="37313201c815b0d6">
+<meta property="qc:admins" content="13231277661673347546375">
+
+<meta name="description" content="LeanCloud 为移动应用开发提供一站式解决方案，包括：数据存储、用户管理、消息推送、应用统计、社交分享、实时聊天等服务，让开发者彻底抛弃后端负担，专注于提升用户体验，最大限度提升产品发布、迭代周期，在市场上占领先机。">
+<meta name="keywords" content="baas, mbaas, backend, avoscloud, mobile, develop, storage, push notification, analytics, social, online chat, adnetwork, 后端服务, 应用开发, 移动互联网, 数据存储, 用户管理, 消息推送, 应用统计, 社交分享, 实时聊天, 广告网络">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta property="og:url" content="https://leancloud.cn">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeanCloud">
+<meta property="og:title" content="Build better apps, faster.">
+<meta property="og:description" content="LeanCloud 为移动应用开发者提供稳定可依赖的后端云服务，包括存储、账号管理、社交分享、推送等以及相关的技术支持和服务">
+<meta property="og:image" content="https://leancloud.cn/images/static/logo.svg">
+<meta property="og:image:type" content="image/svg">
+<meta property="og:image" content="https://leancloud.cn/images/static/logo.png">
+<meta property="og:image:type" content="image/png">
+
+<link href="http://blog.leancloud.cn/atom.xml" rel="alternate" title="LeanCloud 官方博客" type="application/atom+xml">
+
+  <link rel="stylesheet" href="https://leancloud.cn/styles/af93deef.app.css">
+  <script async="" src="./LeanCloud_files/analytics.js"></script><script src="./LeanCloud_files/5ac93b09.all.js"></script>
+
+
+<script src="./LeanCloud_files/b18d307b.dashboard.js"></script><style type="text/css"></style>
+  
+</head>
+<body ng-app="dashBoard" class="body-init homepage ng-scope ready in body-slide-0 afp-silver" ng-controller="UserCtrl" ng-class="[bodyClass, activeClass]">
+
+<!--[if lt IE 9]>
+<div class="section dashboard-banner for-ie-suckers" style="margin: 0;">
+  <div class="container">
+    <div class="row">
+      <b>361 安全卫士提醒您：</b>您的 IE 浏览器不被支持。试试其他的：<a href="http://www.google.com/chrome">Google 浏览器</a>、<a href="http://firefox.com.cn/">火狐浏览器</a>、<a href="http://www.apple.com.cn/safari/">Safari</a>
+    </div>
+  </div>
+</div>
+<![endif]-->
+
+
+
+<div id="perspective" class="perspective effect-movedown">
+  <div class="homepage-wrapper">
+    <div class="homepage-background">
+      <!-- Cube awesomeness -->
+
+      <div class="homepage-scroll-wrapper">
+        <div class="section hero">
+          <div class="container">
+            <!-- Style hack, don't delete -->
+          </div>
+
+          <div class="hero-unit">
+            <div class="navbar">
+  <div class="container-fluid site-nav">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a target="_self" href="https://leancloud.cn/" class="navbar-brand font-logo">
+        LeanCloud
+      </a>
+    </div>
+
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav" role="navigation">
+        <!-- NOTE: To avoid unwanted inline space, please keep the following list items in a single line -->
+        <li><a target="_self" href="https://leancloud.cn/features/storage.html">功能</a></li><li><a target="_self" href="https://leancloud.cn/customers.html">用户</a></li><li><a target="_self" href="https://leancloud.cn/pricing.html" class="show-price-link">价格</a></li><li><a target="_self" href="https://leancloud.cn/docs/">文档</a></li><li><a target="_self" href="https://leancloud.cn/docs/sdk_down.html">下载</a></li><li><a target="_self" href="http://blog.leancloud.cn/">Blog</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown ng-hide" ng-show="user.username">
+          <!-- <a href="applist.html">控制台</a> -->
+          <a target="_self" role="button" href="https://leancloud.cn/applist.html" class="dropdown-toggle user-name disabled" data-toggle="dropdown" data-hover="dropdown">
+            <span class="user-gravatar">
+              <img gravatar-src="user.email" gravatar-size="64">
+            </span>
+            <span class="user-name-text ng-binding"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a target="_self" href="https://leancloud.cn/settings.html">帐号设置</a></li>
+            <li><a target="_self" href="https://leancloud.cn/applist.html">控制台</a></li>
+            <li><a target="_self" href="https://leancloud.cn/settings.html#/setting/team">团队管理</a></li>
+            <li><a target="_self" href="https://leancloud.cn/bill.html#/bill/general">财务</a></li>
+            <!-- <li><a target="_self" href="/settings.html#/setting/invite">邀请好友</a></li> -->
+            <li ng-show="user.username" style="" class="ng-hide"><a target="_self" ng-click="signout()">登出</a></li>
+          </ul>
+        </li>
+        <li ng-hide="user.username"><a target="_self" href="https://leancloud.cn/login.html#/signin">登录</a></li>
+        <li ng-hide="user.username"><a target="_self" href="https://leancloud.cn/login.html#/signup">注册</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+
+            <div class="flexslider slider-homepage">
+              
+            <div class="flex-viewport" style="overflow: hidden; position: relative;"><ul class="slides" style="width: 1400%; -webkit-transition-duration: 0s; transition-duration: 0s; -webkit-transform: translate3d(-1349px, 0px, 0px); transform: translate3d(-1349px, 0px, 0px);"><li class="slide brand-logo-wrapper clone" aria-hidden="true" style="width: 1349px; float: left; display: block;">
+                  <a href="https://leancloud.cn/features/modules.html" class="slider-link">
+                    <i class="icon icon-slider-alt" style="font-size: 100px"></i>
+                    <p class="title font-logo">LeanModules</p>
+                    <p class="subtitle">辅助<span class="hidden-xs">工具</span>模块，让<span class="hidden-xs">您的</span>开发更敏捷、更轻松</p>
+                  </a>
+                </li>
+                <li class="slide flex-active-slide" style="width: 1349px; float: left; display: block;">
+                  <div class="brand-logo-wrapper">
+                    <h1 class="callout-copy">为开发加<span class="last-letter">速</span></h1>
+                    <a href="https://leancloud.cn/" class="brand-logo font-logo">
+                      Build better apps, faster.
+                    </a>
+                    <!-- <h1 class="callout-copy"><a href="http://blog.leancloud.cn/2234/">作别 <span class="font-logo">AVOS Cloud</span>，更名 <span class="font-logo">LeanCloud</span> 助力精益创业</a></h1> -->
+                    <h4>
+                      <a href="https://leancloud.cn/login.html#signup" class="signup-btn has-icon show-price">免费试用<span class="icon icon-slider-nav-right"></span></a>
+                      <a href="https://leancloud.cn/pricing.html" id="showPrice" class="signup-btn show-price-link">价格方案</a>
+                    </h4>
+                  </div>
+                </li>
+
+                <li class="slide brand-logo-wrapper" style="width: 1349px; float: left; display: block;">
+                  <a href="https://leancloud.cn/features/storage.html" class="slider-link">
+                    <i class="icon icon-cloud-storage" style=""></i>
+                    <p class="title font-logo">LeanStorage</p>
+                    <p class="subtitle">让你彻底摆脱后端困扰，灵活扩展</p>
+                  </a>
+                </li>
+
+                <li class="slide brand-logo-wrapper" style="width: 1349px; float: left; display: block;">
+                  <a href="https://leancloud.cn/features/message.html" class="slider-link">
+                    <i class="icon icon-chat" style="font-size: 110px"></i>
+                    <p class="title font-logo">LeanMessage</p>
+                    <p class="subtitle"><span class="hidden-xs">实时消息，</span>让开发者开心开发，让用户聊了又聊</p>
+                  </a>
+                </li>
+
+                <li class="slide brand-logo-wrapper" style="width: 1349px; float: left; display: block;">
+                  <a href="https://leancloud.cn/features/analytics.html" class="slider-link">
+                    <i class="icon icon-analytics" style="font-size: 130px; margin: -10px 0 10px;"></i>
+                    <p class="title font-logo">LeanAnalytics</p>
+                    <p class="subtitle">应用数据实时统计，读懂你的用户</p>
+                  </a>
+                </li>
+
+                <li class="slide brand-logo-wrapper" style="width: 1349px; float: left; display: block;">
+                  <a href="https://leancloud.cn/features/modules.html" class="slider-link">
+                    <i class="icon icon-slider-alt" style="font-size: 100px"></i>
+                    <p class="title font-logo">LeanModules</p>
+                    <p class="subtitle">辅助<span class="hidden-xs">工具</span>模块，让<span class="hidden-xs">您的</span>开发更敏捷、更轻松</p>
+                  </a>
+                </li>
+              <li class="slide clone" aria-hidden="true" style="width: 1349px; float: left; display: block;">
+                  <div class="brand-logo-wrapper">
+                    <h1 class="callout-copy">为开发加<span class="last-letter">速</span></h1>
+                    <a href="https://leancloud.cn/" class="brand-logo font-logo">
+                      Build better apps, faster.
+                    </a>
+                    <!-- <h1 class="callout-copy"><a href="http://blog.leancloud.cn/2234/">作别 <span class="font-logo">AVOS Cloud</span>，更名 <span class="font-logo">LeanCloud</span> 助力精益创业</a></h1> -->
+                    <h4>
+                      <a href="https://leancloud.cn/login.html#signup" class="signup-btn has-icon show-price">免费试用<span class="icon icon-slider-nav-right"></span></a>
+                      <a href="https://leancloud.cn/pricing.html" id="showPrice_clone" class="signup-btn show-price-link">价格方案</a>
+                    </h4>
+                  </div>
+                </li></ul></div><ol class="flex-control-nav flex-control-paging"><li><a class="flex-active">1</a></li><li><a>2</a></li><li><a class="">3</a></li><li><a class="">4</a></li><li><a>5</a></li></ol><ul class="flex-direction-nav"><li><a class="flex-prev" href="https://leancloud.cn/?ver=silver#">Previous</a></li><li><a class="flex-next" href="https://leancloud.cn/?ver=silver#">Next</a></li></ul></div><!-- .flexslider -->
+          </div>
+        </div>
+
+       
+        <!-- .section dashboard-banner -->
+
+        <div class="section dashboard-banner dashboard-banner-lg afp-hidden">
+          <div class="container">
+            <div class="row">
+              <a href="https://leancloud.cn/all-new.html" class="brand-logo font-logo">
+                Happy April Fools’ Day!
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="section dashboard-banner dashboard-banner-md">
+          <div class="container">
+            <div class="row">
+              <a href="https://leancloud.cn/jobs.html" class="brand-logo font-logo">
+                加入 LeanCloud
+              </a>
+            </div>
+            <!-- .row -->
+          </div>
+          <!-- .container -->
+        </div>
+        <!-- .section dashboard-banner -->
+
+        <div class="section dashboard-banner dashboard-banner-sm">
+          <div class="container">
+            <div class="row">
+              <a href="http://blog.leancloud.cn/2559/" class="brand-logo font-logo">
+                [新功能] 离线分析：自由、迅捷地分析存储在云端的海量数据
+              </a>
+            </div>
+            <!-- .row -->
+          </div>
+          <!-- .container -->
+        </div>
+        <!-- .section dashboard-banner -->
+
+        <div class="section dashboard-banner ng-hide" ng-show="user.username" style="">
+  <div class="container">
+    <div class="row">
+      您已登录，请访问 <a href="https://leancloud.cn/applist.html">控制台</a> 查看并管理已创建的应用
+    </div>
+    <!-- .row -->
+  </div>
+  <!-- .container -->
+</div>
+<!-- .section dashboard-banner -->
+
+
+        <div class="section features">
+          <div class="container">
+            <div class="feature-row feature-row-1 row">
+              <div class="feat-img-wrapper col-md-6 col-md-push-6 loaded">
+                <div class="feat-img">
+                  <i class="feat-icon icon-beaker"></i>
+                </div>
+              </div>
+              <div class="feat-text-wrapper col-md-6 col-md-pull-6">
+                <h2>和应用服务器、存储服务器说再见</h2>
+                <p>再也不用租服务器，也不用写后端代码了。LeanCloud 提供一站式后端云服务，从数据存储、实时聊天、消息推送到移动统计，涵盖应用开发的多方面后端需求。</p>
+                <a href="https://leancloud.cn/features.html" class="code-toggle">查看完整功能</a>
+              </div>
+            </div>
+
+            <div class="feature-row feature-row-2 row">
+              <div class="feat-img-wrapper col-md-6 loaded">
+                <div class="feat-img">
+                  <i class="feat-icon icon-mobile"></i>
+                </div>
+              </div>
+              <div class="feat-text-wrapper col-md-6">
+                <h2>省钱、省时、省力</h2>
+                <p>我们提供 iOS / Android / WindowPhone / Javascript 等多平台的原生 SDK，几分钟简单集成，即可拥有一个成熟、稳定的后端系统。超出想象的免费额度，大幅降低你的开发和运维成本，助你打造更好的用户体验，在市场竞争中快人一步。</p>
+                <a href="https://leancloud.cn/docs/" class="code-toggle">查看 SDK</a>
+              </div>
+            </div>
+
+            <div class="feature-row feature-row-3 row">
+              <div class="feat-img-wrapper col-md-6 col-md-push-6 loaded">
+                <div class="feat-img">
+                  <i class="feat-icon icon-checked"></i>
+                </div>
+              </div>
+              <div class="feat-text-wrapper col-md-6 col-md-pull-6">
+                <h2>众多公司和团队都在使用</h2>
+                <p>轻度手游、在线教育、智能设备、传统媒体、企业应用⋯⋯众多细分领域的客户都在使用我们的服务，不仅有创新工场、CCTV、时尚集团这样的商业机构，也包括知乎、看球啦、口袋锦囊等热门应用。数以万计的团队、开发者的一致选择。</p>
+                <a href="https://leancloud.cn/customers.html" class="code-toggle">看看我们都有哪些客户</a>
+              </div>
+            </div>
+          </div>
+        </div><!-- end features-->
+
+        <div class="section clients" id="ac-partener">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <h2 class="subtitle">
+                  企业用户及合作伙伴
+                  <a href="https://leancloud.cn/partners.html" class="btn btn-default btn-sm">更多</a>
+                </h2>
+
+                <div class="partners">
+                  <div class="partner">
+  <a target="_blank">
+    <img data-src="images/static/partner-iw.png" title="" width="140" height="57" class="bstooltip" src="./LeanCloud_files/partner-iw.png" data-original-title="创新工场官方指定平台">
+  </a>
+  <h5 class="title">创新工场官方指定平台</h5>
+</div>
+
+<div class="partner">
+  <a target="_blank">
+    <img data-src="images/static/partner-cctv.svg" title="" width="100" height="28" class="bstooltip" src="./LeanCloud_files/partner-cctv.svg" data-original-title="CCTV 合作伙伴">
+  </a>
+  <h5 class="title">CCTV 合作伙伴</h5>
+</div>
+
+<div class="partner">
+  <a target="_blank">
+    <img data-src="images/static/partner-qiniu.png" title="" width="110" height="53" class="bstooltip" src="./LeanCloud_files/partner-qiniu.png" data-original-title="七牛">
+  </a>
+  <h5 class="title">七牛</h5>
+</div>
+
+<div class="partner">
+  <a target="_blank">
+    <img data-src="images/static/partner-csdn.png" title="" width="130" height="39" class="bstooltip" src="./LeanCloud_files/partner-csdn.png" data-original-title="CSDN">
+  </a>
+  <h5 class="title">CSDN</h5>
+</div>
+
+<div class="partner">
+  <a target="_blank">
+    <img data-src="images/static/partner-pingwest.png" title="" width="160" height="28" class="bstooltip" src="./LeanCloud_files/partner-pingwest.png" data-original-title="PingWest">
+  </a>
+  <h5 class="title">PingWest</h5>
+</div>
+
+<div class="partner">
+  <a target="_blank">
+    <img data-src="images/static/partner-technode.png" title="" width="170" height="31" class="bstooltip" src="./LeanCloud_files/partner-technode.png" data-original-title="动点科技">
+  </a>
+  <h5 class="title">动点科技</h5>
+</div>
+
+<div class="partner">
+  <a target="_blank">
+    <img data-src="images/static/partner-ucloud.png" title="" width="130" height="37" class="bstooltip" src="./LeanCloud_files/partner-ucloud.png" data-original-title="UCloud">
+  </a>
+  <h5 class="title">UCloud</h5>
+</div>
+
+<div class="partner">
+  <a target="_blank">
+    <img data-src="images/static/partner-fir.png" title="" width="150" height="48" class="bstooltip" src="./LeanCloud_files/partner-fir.png" data-original-title="Fly It Remotely">
+  </a>
+  <h5 class="title">Fly It Remotely</h5>
+</div>
+
+                </div>
+
+                <h2 class="subtitle">
+                  他们都在用
+                  <a href="https://leancloud.cn/customers.html" class="btn btn-default btn-sm">更多</a>
+                </h2>
+                <ul class="lazyload-container">
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="知乎">
+                      <img data-src="/images/static/client-zhihu.png" class="" src="./LeanCloud_files/client-zhihu.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="暴走漫画">
+                      <img data-src="/images/static/client-baozoumanhua.png" class="" src="./LeanCloud_files/client-baozoumanhua.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="拉卡拉">
+                      <img data-src="/images/static/client-lakala.png" class="" src="./LeanCloud_files/client-lakala.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="百姓网">
+                      <img data-src="/images/static/client-baixing.png" class="" src="./LeanCloud_files/client-baixing.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="知乎日报">
+                      <img data-src="/images/static/client-zhihu-ribao.jpg" class="" src="./LeanCloud_files/client-zhihu-ribao.jpg">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="AnimeTaste">
+                      <img data-src="/images/static/client-animetaste.png" class="" src="./LeanCloud_files/client-animetaste.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="决战喵星">
+                      <img data-src="/images/static/client-juezhanmiaoxing.png" class="" src="./LeanCloud_files/client-juezhanmiaoxing.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="汉字王国-米亚米娜的识字旅行">
+                      <img data-src="/images/static/client-hzwg.png" class="" src="./LeanCloud_files/client-hzwg.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="世界邦旅行">
+                      <img data-src="/images/static/client-shijiebang.png" class="" src="./LeanCloud_files/client-shijiebang.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="Delicious">
+                      <img data-src="/images/static/client-delicious.png" class="" src="./LeanCloud_files/client-delicious.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="MixBit">
+                      <img data-src="/images/static/client-mixbit.jpg" class="" src="./LeanCloud_files/client-mixbit.jpg">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="口袋锦囊">
+                      <img data-src="/images/static/client-lol.jpg" class="" src="./LeanCloud_files/client-lol.jpg">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="糖护士">
+                      <img data-src="/images/static/client-dnurse.png" class="" src="./LeanCloud_files/client-dnurse.png">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="看球啦">
+                      <img data-src="/images/static/client-kanqiula.jpg" class="" src="./LeanCloud_files/client-kanqiula.jpg">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="缘创派">
+                      <img data-src="/images/static/client-yuanchuangpai.jpg" class="" src="./LeanCloud_files/client-yuanchuangpai.jpg">
+                    </a>
+                  </li>
+
+                  <li class="col-sm-2--disabled">
+                    <a target="_blank" class="bstooltip" title="" data-original-title="玩拍">
+                      <img data-src="/images/static/client-wanpai.png" class="" src="./LeanCloud_files/client-wanpai.png">
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div><!--end clients-->
+
+        <div class="section signup-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <span class="mobile-hide">LeanCloud 让您</span>感受全新的开发体验
+                <div class="signup-btn-bottom-wrap">
+                    <a href="https://leancloud.cn/login.html#signup" class="signup-btn signup-btn-bottom has-icon" target="_top">免费试用 <span class="icon icon-slider-nav-right"></span></a>
+                </div>
+            </div>
+            <!-- .col-md-12 -->
+        </div>
+        <!-- .row -->
+    </div>
+    <!-- .container -->
+</div>
+<!-- .section signup-bottom -->
+
+<footer class="footer text-center">
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-sm-10 col-sm-offset-1">
+
+        <div class="row">
+
+          <div class="footer-links-wrap">
+            <ul class="footer-links vertical">
+              <li><span class="font-logo">About</span></li>
+              <li><a href="https://leancloud.cn/about.html" target="_self">关于<span class="mobile-hide">我们</span></a></li>
+              <li><a href="https://leancloud.cn/news.html" target="_self">媒体<span class="mobile-hide">报道</span></a></li>
+              <li><a href="https://leancloud.cn/jobs.html" target="_self">工作<span class="mobile-hide">机会</span></a></li>
+              <li><a href="http://open.leancloud.cn/">开放资源</a></li>
+              <li><a href="https://leancloud.cn/terms.html" target="_self"><span class="mobile-hide">使用</span>协议</a></li>
+            </ul>
+
+            <ul class="footer-links vertical">
+              <li><span class="font-logo">Products</span></li>
+              <li><a href="https://leancloud.cn/features/storage.html" target="_self">数据存储</a></li>
+              <li><a href="https://leancloud.cn/features/message.html" target="_self">消息推送</a></li>
+              <li><a href="https://leancloud.cn/features/analytics.html" target="_self">用户分析</a></li>
+              <li><a href="https://leancloud.cn/features/modules.html" target="_self">扩展模块</a></li>
+              <li><a href="https://leancloud.cn/pricing.html" target="_self">价格</a></li>
+            </ul>
+
+            <ul class="footer-links vertical">
+              <li><span class="font-logo">Resources</span></li>
+              <li><a href="https://leancloud.cn/docs/" target="_self">文档</a></li>
+              <li><a href="https://leancloud.cn/docs/sdk_down.html" target="_self">下载</a></li>
+              <li><a href="https://leancloud.cn/apps.html" target="_self">App</a></li>
+              <li><a href="https://leancloud.cn/docs/faq.html" target="_self">常见问题</a></li>
+              <li><a href="https://status.leancloud.cn/"><span class="mobile-hide">健康</span>状态</a></li>
+            </ul>
+
+            <ul class="footer-links vertical">
+              <li><span class="font-logo">Community</span></li>
+              <li><a href="http://ticket.avosapps.com/" target="_self"><span class="mobile-hide">技术</span>支持</a></li>
+              <li><a href="https://forum.leancloud.cn/">社区</a></li>
+              <li><a href="http://blog.leancloud.cn/">Blog</a></li>
+              <li><a href="https://leancloud.cn/logo.html" target="_self">Logo</a></li>
+            </ul>
+          </div>
+          <!-- .footer-links-wrap -->
+
+        </div>
+        <!-- .row -->
+
+        <div class="row">
+          <div class="col-sm-12">
+            <a href="https://leancloud.cn/" class="logo font-logo logo-bottom">LeanCloud</a>
+
+            <ul class="footer-links">
+              <li><a href="http://github.com/leancloud">GitHub</a></li>
+              <li class="muted">·</li>
+              <li><a href="http://twitter.com/leancloudrocks">Twitter</a></li>
+              <li class="muted">·</li>
+              <li><a href="http://weibo.com/avoscloud">Weibo</a></li>
+              <li class="muted">·</li>
+              <li><a href="https://leancloud.cn/?ver=silver###" class="bspopover" data-toggle="popover" data-placement="top" data-trigger="hover" data-html="true" data-content="&lt;img src=images/static/qr-wechat-borderless.png style=&#39;width: 140px; height: 140px;&#39;&gt;" data-original-title="" title="">WeChat</a></li>
+            </ul>
+
+            <ul class="footer-links suckers">
+              <li>美味书签（北京）信息技术有限公司</li>
+              <li class="muted">·</li>
+              <li><a href="http://www.miibeian.gov.cn/">京ICP备12025059号-8</a></li>
+              <li class="muted">·</li>
+              <li>京公网安备11010802014772号</li>
+              <li class="muted">·</li>
+              <li>经营性许可证编号：京ICP证130300号</li>
+            </ul>
+          </div>
+          <!-- .col-sm-12 -->
+        </div>
+        <!-- .row -->
+
+      </div>
+      <!-- .col-sm-10 col-sm-offset-2 -->
+    </div>
+    <!-- .row -->
+
+  </div>
+</footer>
+
+      </div>
+      <!-- .homepage-scroll-wrapper -->
+    </div>
+    <!-- .homepage-background -->
+  </div>
+  <!-- .homepage-wrapper -->
+
+  <!-- <div class="effect-movedown-gradient gradient-1"></div>
+  <div class="effect-movedown-gradient gradient-2"></div>
+  <div class="effect-movedown-gradient gradient-3"></div>
+  <div class="effect-movedown-gradient gradient-4"></div>
+  <div class="effect-movedown-gradient gradient-5"></div> -->
+
+  <nav class="outer-nav top horizontal">
+  <div class="outer-nav-limit">
+    <h1>
+      <a target="_self" href="https://leancloud.cn/" class="font-logo">
+        LeanCloud
+      </a>
+    </h1>
+    <h2>价格合理，童叟无欺</h2>
+
+    <!-- Remember to change ./app/templates/pages/bill.swig -->
+<h2 ng-show="env.WEBHOST==&#39;us&#39;" class="ng-hide">美国节点正在免费试用期，价格方案将在一段时间后公布。</h2>
+<div class="price-wrap clearfix" ng-show="env.WEBHOST!=&#39;us&#39;">
+  <ul class="price-card">
+    <li class="icon"><i class="icon icon-gear"></i></li>
+    <li class="title">数据 API <b class="has-required tooltip-html ng-scope" data-title="&lt;ul&gt;&lt;li&gt;每月 100 万次免费请求&lt;/li&gt;&lt;li&gt;包括所有非文件类数据的存取&lt;/li&gt;&lt;li&gt;数据 API 流量免费&lt;/li&gt;&lt;/ul&gt;" bs-tooltip="" data-placement="top" data-html="true">?</b></li>
+    <li class="figure"><small>每月</small> <b>100</b> <small>万次免费</small></li>
+    <li class="translucent">超出后 <strong>0.5 元</strong> / 万次</li>
+  </ul>
+  <!-- .price-card -->
+
+  <ul class="price-card">
+    <li class="icon"><i class="icon icon-cloud-storage"></i></li>
+    <li class="title">文件存储</li>
+    <li class="figure"><small>每月</small> <b>10 GB</b> <small>免费</small></li>
+    <li class="translucent">超出后 <b>0.16 元</b> / GB</li>
+  </ul>
+  <!-- .price-card -->
+
+  <ul class="price-card">
+    <li class="icon"><i class="icon icon-dashboard"></i></li>
+    <li class="title">文件流量 <b class="has-required tooltip-html ng-scope" data-title="&lt;ul&gt;&lt;li&gt;&lt;b&gt;下载请求&lt;/b&gt;：每月 100 万次免费，超出后 0.01 元/万次&lt;/li&gt;&lt;li&gt;&lt;b&gt;上传／删除请求&lt;/b&gt;：每月 10 万次，超出后 0.1 元/万次&lt;/li&gt;&lt;li&gt;上传流量免费&lt;/li&gt;&lt;/ul&gt;" bs-tooltip="" data-placement="top" data-html="true">?</b></li>
+    <li class="figure"><small>每月</small> <b>15 GB</b> <small>免费</small></li>
+    <li class="translucent">超出后 <b>0.3 元</b> / GB</li>
+  </ul>
+  <!-- .price-card -->
+
+  <ul class="price-card">
+    <li class="icon"><i class="icon icon-chat"></i></li>
+    <li class="title">实时消息 <b class="has-required ng-scope" data-title="活跃用户指当天登录到实时消息服务的独立用户" bs-tooltip="" data-placement="top">?</b></li>
+    <li class="figure"><small>每天</small> <b>500</b> <small>位免费活跃用户</small></li>
+    <li class="translucent">超出后 <b>1 元</b> / 千人 / 天</li>
+  </ul>
+  <!-- .price-card -->
+
+  <ul class="price-card">
+    <li class="icon"><i class="icon icon-push"></i></li>
+    <li class="title">消息推送</li>
+    <li class="figure"><b>免费</b></li>
+    <li class="translucent">无任何限制</li>
+  </ul>
+  <!-- .price-card -->
+
+  <ul class="price-card">
+    <li class="icon"><i class="icon icon-analytics"></i></li>
+    <li class="title">统计分析</li>
+    <li class="figure"><b>免费</b></li>
+    <li class="translucent">无任何限制</li>
+  </ul>
+  <!-- .price-card -->
+
+  <ul class="price-card">
+    <li class="icon"><i class="icon icon-sms"></i></li>
+    <li class="title">短信</li>
+    <li class="figure"><small>每帐号前</small> <b>100</b> <small>条免费</small></li>
+    <li class="translucent">超出后 <b>0.06 元</b> / 条</li>
+  </ul>
+  <!-- .price-card -->
+
+  <ul class="price-card" style="opacity: .5;">
+    <li class="icon"><i class="icon icon-question"></i></li>
+    <li class="title">敬請期待</li>
+    <li class="figure">Coming Soon</li>
+    <li class="translucent">更多功能敬請期待</li>
+  </ul>
+  <!-- .price-card -->
+
+</div>
+<!-- .price-wrap -->
+
+
+    <a href="https://leancloud.cn/login.html#signup" class="signup-btn" target="_top">免费试用</a>
+    <!-- <a href="mailto:support@leancloud.cn" class="signup-btn">联系我们</a> -->
+    <!-- <p class="price-note">详细价格信息，请查阅 <a href="pricing.html"><b>价格明细</b></a></p> -->
+    <p class="price-note">免费额度按每个账号计算，详细请查看 <a href="https://leancloud.cn/pricing.html" target="_self"><b>价格详情</b></a></p>
+  </div>
+</nav>
+
+
+</div>
+<!-- .perspective -->
+
+
+
+
+
+<script src="./LeanCloud_files/caa4e1b2.homepage.js"></script>
+
+
+
+<script type="text/javascript">
+  $(window).load (
+    function () {
+      $("body").addClass("in");
+      $(".feat-img-wrapper").addClass("loaded");
+    }
+  );
+
+  $(".bstooltip").tooltip({
+    viewport: {
+      selector: 'body',
+      padding: 10
+    },
+    container: "body"
+  });
+  $(".bspopover").popover({
+    viewport: {
+      selector: 'body',
+      padding: 10
+    }
+  });
+
+  // $("img.lazyload").lazyload({
+  //   effect: "fadeIn"
+  // });
+
+  // $(".code-toggle").click(function(e) {
+  //     e.preventDefault();
+  //   $(this).parent().parent().prev().toggleClass("code-on");
+  // });
+
+  Mousetrap.bind('esc', function () { $(".modalview .homepage-wrapper").click(); } );
+
+  // https://css-tricks.com/snippets/javascript/get-url-variables/
+  function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0;i<vars.length;i++) {
+      var pair = vars[i].split("=");
+      if(pair[0] == variable){return pair[1];}
+    }
+    return(false);
+  }
+
+  var aprilFoolsClass = getQueryVariable("ver");
+  if (aprilFoolsClass) {
+    $("body").addClass("afp-" + aprilFoolsClass);
+    $(".afp-hidden").removeClass("hidden");
+  }
+
+  var Homepage = function () {
+    return {
+      initEffect: function () {
+        $(".flexslider.slider-homepage").flexslider({
+          animation: "slide",
+          smoothHeight: false,
+          slideshowSpeed: 6000,
+          animationSpeed: 400,
+          pauseOnHover: true,
+          controlNav: true,
+          directionNav: true,
+          keyboard: false,
+          slideshow: false,
+          before: function(slider) {
+            $("body")
+              .removeClass("body-slide-" + slider.currentSlide)
+              .addClass("body-slide-" + slider.animatingTo);
+
+            // April Fools' Day
+            if (/(^|\s)body-slide-[1-9]+(\s|$)/.test($("body").attr("class"))) {
+              $("body").removeClass("afp-" + aprilFoolsClass);
+            } else {
+              $("body").addClass("afp-" + aprilFoolsClass);
+            }
+          }
+        });
+
+        // Sliders in Customers
+        $(".flexslider.slider-customers").each(function () {
+
+          $(this).flexslider({
+            animation: "fade",
+            smoothHeight: false,
+            slideshowSpeed: 3000,
+            animationSpeed: 200,
+            pauseOnHover: false,
+            controlNav: false,
+            directionNav: false,
+            keyboard: false,
+            slideshow: true,
+            start: function (slider) {
+              // Add loaded class, make all images display: block;
+              $(slider).addClass("slider-loaded");
+
+              // Lazy load initial image
+              $(slider).find(".flex-active-slide img.lazyslide").each(function () {
+                var src = $(this).attr("data-src");
+                $(this).attr("src", src).removeAttr("data-src").removeClass("lazyslide");
+              });
+
+              // TODO: buggy
+              // Fire next slide when click on current image
+              // $(slider).find(".flex-active-slide").each(function () {
+              //   $("img").click(function (e) {
+              //     e.preventDefault();
+              //     $(this).flexslider("next");
+              //   });
+              // });
+            },
+            before: function (slider) {
+              // Lazy load for the rest of the sliders
+              var slide = $(slider).find(".slides").children().eq(slider.animatingTo).find("img");
+              var src = slide.attr("data-src");
+              slide.attr("src", src).removeAttr("data-src").removeClass("lazyslide");
+            }
+          });
+        });
+
+        // startAtSlide = 0;
+        // if (window.location.hash == "") {
+        //   startAtSlide = 1;
+        // } else {
+        //   startAtSlide = window.location.hash.substr(8,1)-0;
+        // }
+        //
+        // $('.flexslider.slider-features').flexslider({
+        //   animation: "slide",
+        //   smoothHeight: true,
+        //   slideshowSpeed: 4000,
+        //   animationSpeed: 400,
+        //   pauseOnHover: true,
+        //   controlNav: true,
+        //   directionNav: false,
+        //   keyboard: false,
+        //   touch: false,
+        //   slideshow: false,
+        //   controlsContainer: ".features-control-nav",
+        //   manualControls: ".features-control-nav li a",
+        //   selector: ".slides > .slide",
+        //   startAt: startAtSlide,
+        //   start: function(slider) {
+        //     $("body").removeClass("body-slide-" + slider.currentSlide).addClass("body-slide-" + slider.animatingTo);
+        //     $(".homepage-background").addClass("slide-" + slider.currentSlide);
+        //     window.location.hash = "slide-" + slider.currentSlide;
+        //   },
+        //   before: function(slider) {
+        //     $("body").removeClass("body-slide-" + slider.currentSlide).addClass("body-slide-" + slider.animatingTo);
+        //     $(".homepage-background").removeClass("slide-" + slider.currentSlide).addClass("slide-" + slider.animatingTo);
+        //     window.location.hash = "slide-" + slider.animatingTo;
+        //     currentSlide = slider.slides[slider.currentSlide];
+        //     $(currentSlide).find(".feature-section-control-nav li:first-child a").click();
+        //   }
+        // });
+
+        // Animate the cubes
+        $(function() {
+          if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
+            $('.cubes-wrap').remove();
+          } else {
+            $('.cube').each( function(k, el) {
+              setTimeout( function() {
+                $(el).addClass('hover');
+              }, 2111 + k * 400 );
+            });
+          }
+        });
+
+        // Customers video init
+        // videojs($(".client-interview-featured-link.play").data("vid")).pause();
+        $(".client-interview-featured-link.play").click(function() {
+          var vidTargetId = $(this).data("vid");
+          var initVid = videojs(vidTargetId);
+          $("body").addClass("video-playing");
+          $("#" + vidTargetId).addClass("vjs-current-active");
+          initVid.play();
+        });
+
+        // Remove video layer
+        $(".video-js-custom-close-button").click(function() {
+          var vidTargetId = $(".vjs-current-active").attr("id");
+          var initVid = videojs(vidTargetId);
+          $("body").removeClass("video-playing");
+          $("#" + vidTargetId).removeClass("vjs-current-active");
+          initVid.pause();
+        });
+
+        // Job board space fix
+        // pangu.element_spacing('.job-board');
+
+        $("body").addClass("ready");
+        $(".dashboard-banner .brand-logo").shuffleLetters();
+      }
+    };
+  }();
+
+  $(document).ready(function() {
+    Homepage.initEffect();
+  });
+</script>
+
+
+
+
+
+
+<script>
+// Bypass Baidu site verification
+$('#ac-partener a').each(function(i,ele){
+  if($(ele).attr('href')!='customers.html' && $(ele).attr('href')!='partners.html'){
+    $(ele).removeAttr('href')
+  }
+});
+</script>
+
+</body></html>
