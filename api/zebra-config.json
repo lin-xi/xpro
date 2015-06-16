@@ -10,7 +10,7 @@
 				"xmeet.api.js": [
 					"_.js",
 					"api.js",
-					"TweenLite.min.js",
+					"TweenMax.min.js",
 					"md5.js",
 					"SocketChat.js",
 					"chat.js",

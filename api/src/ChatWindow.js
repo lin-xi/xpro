@@ -30,13 +30,12 @@ GroupChatWindow.prototype.init = function(){
 
 GroupChatWindow.prototype.sendMessage = function(){
 	var me = this;
-
 	var input = _.dom.get('.chat-input')[0];
 	var message = input.innerHTML;
 	if(message == "") return;
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
 	var sendButton = _.dom.get(".chat-send")[0];
-	var messageElements = me.addMessage(message, me.self, null, true);
+	var messageElements = me.addMessage(message, me.self, me.getTime(), true);
 	var messageContainer = messageElements.container;
 	var messagesContainer = _.dom.get(".chat-messages")[0];
 	var messageBubble = messageElements.bubble;
@@ -64,7 +63,7 @@ GroupChatWindow.prototype.sendMessage = function(){
 	var curScrollDiff = 0;
 	var effectYTransition;
 	var setEffectYTransition = function(dest, dur, ease){
-		return TweenLite.to(
+		return TweenMax.to(
 			messageEffect, dur, {
 				y: dest,
 				ease: ease,
@@ -86,7 +85,7 @@ GroupChatWindow.prototype.sendMessage = function(){
 
 	effectYTransition = setEffectYTransition(pos.y, 0.8, Power2.easeInOut);
 
-	TweenLite.to(
+	TweenMax.to(
 		messageEffect, 0.6, {
 			delay: 0.2,
 			x: pos.x,
@@ -96,13 +95,13 @@ GroupChatWindow.prototype.sendMessage = function(){
 		}
 	);
 
-	TweenLite.from(
+	TweenMax.from(
 		messageBubble, 0.2,{
 			delay: 0.65,
 			opacity: 0,
 			ease: Quad.easeInOut,
 			onComplete: function(){
-				TweenLite.killTweensOf(messageEffect);
+				TweenMax.killTweensOf(messageEffect);
 				effectContainer.removeChild(messageEffect);
 
 				me.dispatch('send', {
@@ -116,9 +115,16 @@ GroupChatWindow.prototype.sendMessage = function(){
 }
 
 GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
+	var me = this;
 	var messagesContainer= _.dom.get(".chat-messages")[0]
 	var msgList = _.dom.get('.chat-messages-list')[0];
-	var messageContainer = _.dom.create('<li class="chat-message chat-message-other"></li>')[0];
+	
+	var messageContainer;
+	if(user.uid != me.self.uid){
+		messageContainer = _.dom.create('<li class="chat-message chat-message-other"></li>')[0];
+	} else {
+		messageContainer = _.dom.create('<li class="chat-message-self chat-message-other"></li>')[0];
+	}
 	msgList.appendChild(messageContainer);
 
 	var messageBubble = _.dom.create('<div class="chat-message-bubble"></div>')[0];
@@ -130,7 +136,7 @@ GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
 
 	var newScroll = messagesContainer.scrollTop;
 	var scrollDiff = newScroll - oldScroll;
-	TweenLite.fromTo(
+	TweenMax.fromTo(
 		msgList, 0.4, {
 			y: scrollDiff
 		},{
@@ -146,19 +152,19 @@ GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
 
 GroupChatWindow.prototype.receiveMessage = function(message, user, time){
 	var me = this;
-	if(user.id == me.self.id) return;
+	if(user.uid == me.self.uid) return;
 	var messageElements = me.addMessage(message, user, time, false),
 		messageContainer = messageElements.container,
 		messageBubble = messageElements.bubble;
 
-	TweenLite.set(messageBubble,{
+	TweenMax.set(messageBubble,{
 		transformOrigin: "60px 50%"
 	});
-	TweenLite.from(messageBubble, 0.4,{
+	TweenMax.from(messageBubble, 0.4,{
 		scale:0,
 		ease:Back.easeOut
 	});
-	TweenLite.from(messageBubble, 0.4, {
+	TweenMax.from(messageBubble, 0.4, {
 		x:-100,
 		ease:Quint.easeOut
 	});
@@ -182,7 +188,7 @@ GroupChatWindow.prototype.startTyping = function(){
 		var dot= _.dom.create('<div class="chat-effect-dot">')[0];
 		_.dom.css(dot, {left: i*20});
 		dots.appendChild(dot);
-		TweenLite.to(dot, 0.3, {
+		TweenMax.to(dot, 0.3, {
 			delay: -i*0.1,
 			y:30,
 			yoyo: true,
@@ -195,7 +201,7 @@ GroupChatWindow.prototype.startTyping = function(){
 	info.innerHTML = "正在输入";
 	_.dom.css(info, {transform: "translate3d(0, 30px, 0)" });
 	infoContainer.appendChild(info);
-	TweenLite.to(info, 0.3, {
+	TweenMax.to(info, 0.3, {
 		y: 0
 	});
 };
@@ -209,13 +215,13 @@ GroupChatWindow.prototype.StoppedTyping = function(){
 		infoContainer = _.dom.get(".chat-info-container")[0];
 
 	var dots= _.dom.get(".chat-effect-dots")[0];
-	TweenLite.to(dots, 0.3, {
+	TweenMax.to(dots, 0.3, {
 		y: 40,
 		ease: Quad.easeIn,
 	});
 
 	var info = _.dom.get(".chat-info-typing")[0];
-	TweenLite.to(info, 0.3, {
+	TweenMax.to(info, 0.3, {
 		y: 30,
 		ease: Quad.easeIn,
 		onComplete:function(){
@@ -241,6 +247,18 @@ GroupChatWindow.prototype.dispatch = function(eventType, param){
 	var me = this;
 	var fn = me._eventsListener[eventType];
 	fn && fn(param);
+};
+
+GroupChatWindow.prototype.getTime = function(){
+	var d = new Date();
+	var arr = [], ti = [];
+	arr.push(d.getFullYear());
+	arr.push(d.getMonth()+1);
+	arr.push(d.getDate());
+	ti.push(d.getHours());
+	ti.push(d.getMinutes());
+	ti.push(d.getSeconds());
+	return 	arr.join('-') + ' ' + ti.join(':');
 };
 
 window.GroupChatWindow = GroupChatWindow;

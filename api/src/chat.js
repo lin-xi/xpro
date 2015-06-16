@@ -1,4 +1,4 @@
-	(function (window) {
+(function (window) {
 	
 	var sock, win, members;
 
@@ -21,21 +21,22 @@
 		var tpl_room = __inline('./xmeet-room.tpl');
 		var nodes = _.dom.create(tpl_room);
 		document.body.appendChild(nodes[0]);
-		_.dom.get('.xmeet-chat-room .name')[0].value = generateName();
+		var name = generateName();
+		_.dom.get('.xmeet-chat-room .name')[0].value = name;
 		_.dom.on('#room-enter', 'click', function(e){
 			_.dom.toggle('.xmeet-chat-room');
-			me.createChatWindow();
+			me.createChatWindow(name);
 		});
 	};
 
-	GroupChat.prototype.createChatWindow = function(){
+	GroupChat.prototype.createChatWindow = function(name){
 		var me = this;
 		if(!sock){
 			sock = new SocketChat('交流群');
 			sock.on('connected', function(data){
 				win = new GroupChatWindow(data.roomId, {
 					uid: data.from,
-					name: '路人甲'
+					name: name
 				});
 				me.bindChatEvent();
 			});
