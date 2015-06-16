@@ -245,6 +245,9 @@ p, span, div, ul, li{padding: 0; margin: 0}
 	color: #222;
 	text-align: left;
 }
+.chat-message-self .chat-message-bubble .user{
+	text-align: right;
+}
 
 .chat-input-bar {
 	position: relative;
