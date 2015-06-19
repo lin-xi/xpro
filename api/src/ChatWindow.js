@@ -1,38 +1,118 @@
-function GroupChatWindow(roomId, self){
+function GroupChatWindow(roomId, roomName, self) {
 	this._eventsListener = {};
 	this.roomId = roomId;
+	this.roomName = roomName;
 	this.self = self;
 	this.init();
 }
 
 
-GroupChatWindow.prototype.init = function(){
+GroupChatWindow.prototype.init = function () {
 	var me = this;
-	
+
 	var tpl = __inline('./xmeet-chatWindow.tpl');
 	var nodes = _.dom.create(tpl);
 	document.body.appendChild(nodes[0]);
+	me.node = nodes[0];
 
-	_.dom.on('.chat-send', 'click', function(e){
+	_.dom.get('.xmeet-chat-window .title')[0].innerHTML = me.roomName;
+	_.dom.get('.setting-panel .nickName')[0].value = me.self.name;
+
+	_.dom.on('.window-title .exit', 'click', function (e) {
+		me.hide();
+	});
+
+	_.dom.on('.chat-send', 'click', function (e) {
 		me.sendMessage();
 	});
 
-	_.dom.on('.chat-input', 'keydown', function(e){
-		if(e.which == 13){
+	_.dom.on('.chat-input', 'keydown', function (e) {
+		if (e.which == 13) {
 			me.sendMessage();
 			e.stopPropagation();
 			e.preventDefault();
 		}
-		me.startTyping();
+		// me.startTyping();
+	});
+
+	_.dom.on('.nickName', 'change', function (e) {
+		if (e.target.value) {
+			me.self.name = e.target.value;
+		}
+	});
+
+	var setPanel = _.dom.get('.setting-panel')[0];
+	var userPanel = _.dom.get('.userList-panel')[0];
+	var setIcon = _.dom.get('.window-title .setting')[0];
+	var userIcon = _.dom.get('.window-title .userList')[0];
+	var setClose = _.dom.get('.setting-panel .close')[0];
+	var userClose = _.dom.get('.userList-panel .close')[0];
+
+	_.dom.on(setIcon, 'click', function (e) {
+		if (!me.settingPanelShow) {
+			TweenMax.to(
+				setPanel, 0.6, {
+					top: 0,
+					ease: Quad.easeInOut,
+					onComplete: function () {
+						me.settingPanelShow = true;
+					}
+				}
+			);
+			_.dom.addClass(setIcon, 'active');
+		}
+		me.usersPanelShow && userClose.click();
+	});
+
+	_.dom.on(userIcon, 'click', function (e) {
+		if (!me.usersPanelShow) {
+			TweenMax.to(
+				userPanel, 0.6, {
+					top: 0,
+					ease: Quad.easeInOut,
+					onComplete: function () {
+						me.usersPanelShow = true;
+					}
+				}
+			);
+			_.dom.addClass(userIcon, 'active');
+		}
+		me.settingPanelShow && setClose.click();
+	});
+
+	_.dom.on(setClose, 'click', function (e) {
+		TweenMax.to(
+			setPanel, 0.6, {
+				top: -120,
+				ease: Quad.easeInOut,
+				onComplete: function () {
+					me.settingPanelShow = false;
+				}
+			}
+		);
+		_.dom.removeClass(setIcon, 'active');
+	});
+
+	_.dom.on(userClose, 'click', function (e) {
+		TweenMax.to(
+			userPanel, 0.6, {
+				top: -320,
+				ease: Quad.easeInOut,
+				onComplete: function () {
+					me.usersPanelShow = false;
+				}
+			}
+		);
+		_.dom.removeClass(userIcon, 'active');
 	});
 };
 
 
-GroupChatWindow.prototype.sendMessage = function(){
+GroupChatWindow.prototype.sendMessage = function () {
 	var me = this;
 	var input = _.dom.get('.chat-input')[0];
 	var message = input.innerHTML;
-	if(message == "") return;
+	if (message == "") return;
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
 	var sendButton = _.dom.get(".chat-send")[0];
 	var messageElements = me.addMessage(message, me.self, me.getTime(), true);
@@ -44,33 +124,35 @@ GroupChatWindow.prototype.sendMessage = function(){
 	input.innerHTML = '';
 
 	var newInputHeight = 48;
-	var inputHeightDiff = newInputHeight-oldInputHeight;
+	var inputHeightDiff = newInputHeight - oldInputHeight;
 
 	var messageEffect = _.dom.create('<div class="chat-message-effect"></div>')[0];
 	messageEffect.appendChild(messageBubble.cloneNode(true));
 	effectContainer.appendChild(messageEffect);
-	_.dom.css(effectContainer, {left: 0, top: 0});
-	me.setFilter('url(#goo)');
+	_.dom.css(effectContainer, {
+		left: 0,
+		top: 0
+	});
 
 	var messagePos = _.dom.offset(messageBubble);
-	var effectPos =  _.dom.offset(messageEffect);
+	var effectPos = _.dom.offset(messageEffect);
 	var pos = {
 		x: messagePos.left - effectPos.left,
-		y:messagePos.top - effectPos.top
+		y: messagePos.top - effectPos.top
 	}
 
 	var startingScroll = messagesContainer.scrollTop;
 	var curScrollDiff = 0;
 	var effectYTransition;
-	var setEffectYTransition = function(dest, dur, ease){
+	var setEffectYTransition = function (dest, dur, ease) {
 		return TweenMax.to(
 			messageEffect, dur, {
 				y: dest,
 				ease: ease,
-				onUpdate: function(){
+				onUpdate: function () {
 					var curScroll = messagesContainer.scrollTop;
 					var scrollDiff = curScroll - startingScroll;
-					if(scrollDiff > 0){
+					if (scrollDiff > 0) {
 						curScrollDiff += scrollDiff;
 						startingScroll = curScroll;
 
@@ -90,17 +172,16 @@ GroupChatWindow.prototype.sendMessage = function(){
 			delay: 0.2,
 			x: pos.x,
 			ease: Quad.easeInOut,
-			onComplete: function(){
-			}
+			onComplete: function () {}
 		}
 	);
 
 	TweenMax.from(
-		messageBubble, 0.2,{
+		messageBubble, 0.2, {
 			delay: 0.65,
 			opacity: 0,
 			ease: Quad.easeInOut,
-			onComplete: function(){
+			onComplete: function () {
 				TweenMax.killTweensOf(messageEffect);
 				effectContainer.removeChild(messageEffect);
 
@@ -114,13 +195,13 @@ GroupChatWindow.prototype.sendMessage = function(){
 	);
 }
 
-GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
+GroupChatWindow.prototype.addMessage = function (message, user, time, isSelf) {
 	var me = this;
-	var messagesContainer= _.dom.get(".chat-messages")[0]
+	var messagesContainer = _.dom.get(".chat-messages")[0]
 	var msgList = _.dom.get('.chat-messages-list')[0];
-	
+
 	var messageContainer;
-	if(user.uid != me.self.uid){
+	if (user.uid != me.self.uid) {
 		messageContainer = _.dom.create('<li class="chat-message chat-message-other"></li>')[0];
 	} else {
 		messageContainer = _.dom.create('<li class="chat-message-self chat-message-other"></li>')[0];
@@ -128,7 +209,7 @@ GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
 	msgList.appendChild(messageContainer);
 
 	var messageBubble = _.dom.create('<div class="chat-message-bubble"></div>')[0];
-	messageBubble.innerHTML = '<p class="user">'+ user.name +'<i></i>'+ time +'</p><p class="msg">' + message + '</p>';
+	messageBubble.innerHTML = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
 	messageContainer.appendChild(messageBubble);
 
 	var oldScroll = messagesContainer.scrollTop;
@@ -139,9 +220,9 @@ GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
 	TweenMax.fromTo(
 		msgList, 0.4, {
 			y: scrollDiff
-		},{
+		}, {
 			y: 0,
-			ease:Quint.easeOut
+			ease: Quint.easeOut
 		}
 	);
 	return {
@@ -150,71 +231,78 @@ GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
 	};
 };
 
-GroupChatWindow.prototype.receiveMessage = function(message, user, time){
+GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 	var me = this;
-	if(user.uid == me.self.uid) return;
+	if (user.uid == me.self.uid) return;
 	var messageElements = me.addMessage(message, user, time, false),
 		messageContainer = messageElements.container,
 		messageBubble = messageElements.bubble;
 
-	TweenMax.set(messageBubble,{
+	TweenMax.set(messageBubble, {
 		transformOrigin: "60px 50%"
 	});
-	TweenMax.from(messageBubble, 0.4,{
-		scale:0,
-		ease:Back.easeOut
+	TweenMax.from(messageBubble, 0.4, {
+		scale: 0,
+		ease: Back.easeOut
 	});
 	TweenMax.from(messageBubble, 0.4, {
-		x:-100,
-		ease:Quint.easeOut
+		x: -100,
+		ease: Quint.easeOut
 	});
 }
 
 
-GroupChatWindow.prototype.startTyping = function(){
+GroupChatWindow.prototype.startTyping = function () {
 	var me = this;
-	if(me.isTyping) return;
+	if (me.isTyping) return;
 
 	me.isTyping = true;
 	var effectContainer = _.dom.get(".chat-effect-container")[0],
 		infoContainer = _.dom.get(".chat-info-container")[0];
 
-	var dots= _.dom.create('<div class="chat-effect-dots"></div>')[0];
-	_.dom.css(dots, {top: -30, left:10});
+	var dots = _.dom.create('<div class="chat-effect-dots"></div>')[0];
+	_.dom.css(dots, {
+		top: -30,
+		left: 10
+	});
 	effectContainer.appendChild(dots);
 
 	me.setFilter('url(#goo)');
 	for (var i = 0; i < 3; i++) {
-		var dot= _.dom.create('<div class="chat-effect-dot">')[0];
-		_.dom.css(dot, {left: i*20});
+		var dot = _.dom.create('<div class="chat-effect-dot">')[0];
+		_.dom.css(dot, {
+			left: i * 20
+		});
 		dots.appendChild(dot);
 		TweenMax.to(dot, 0.3, {
-			delay: -i*0.1,
-			y:30,
+			delay: -i * 0.1,
+			y: 30,
 			yoyo: true,
 			repeat: -1,
-			ease:Quad.easeInOut
+			ease: Quad.easeInOut
 		});
 	}
 
 	var info = _.dom.create('<div class="chat-info-typing">')[0];
 	info.innerHTML = "正在输入";
-	_.dom.css(info, {transform: "translate3d(0, 30px, 0)" });
+	_.dom.css(info, {
+		transform: "translate3d(0, 30px, 0)"
+	});
 	infoContainer.appendChild(info);
 	TweenMax.to(info, 0.3, {
 		y: 0
 	});
 };
 
-GroupChatWindow.prototype.StoppedTyping = function(){
+GroupChatWindow.prototype.StoppedTyping = function () {
 	var me = this;
-	if(!me.isTyping) return;
+	if (!me.isTyping) return;
 
 	me.isTyping = false;
 	var effectContainer = _.dom.get(".chat-effect-container")[0],
 		infoContainer = _.dom.get(".chat-info-container")[0];
 
-	var dots= _.dom.get(".chat-effect-dots")[0];
+	var dots = _.dom.get(".chat-effect-dots")[0];
 	TweenMax.to(dots, 0.3, {
 		y: 40,
 		ease: Quad.easeIn,
@@ -224,7 +312,7 @@ GroupChatWindow.prototype.StoppedTyping = function(){
 	TweenMax.to(info, 0.3, {
 		y: 30,
 		ease: Quad.easeIn,
-		onComplete:function(){
+		onComplete: function () {
 			effectContainer.removeChild(dots);
 			infoContainer.removeChild(info);
 			me.setFilter('none');
@@ -232,33 +320,57 @@ GroupChatWindow.prototype.StoppedTyping = function(){
 	});
 };
 
-GroupChatWindow.prototype.setFilter = function(value){
+GroupChatWindow.prototype.updateUsers = function (members) {
+	var me = this;
+	var users = _.dom.get('.userList-panel .users')[0];
+	for (var k in members) {
+		var item = members[k];
+		var u = _.dom.create('<li>' + item.name + '</li>')[0];
+		users.appendChild(u);
+	}
+};
+
+GroupChatWindow.prototype.show = function () {
+	var me = this;
+	me.node.style.display = "block";
+};
+
+GroupChatWindow.prototype.hide = function () {
+	var me = this;
+	me.node.style.display = "none";
+	me.dispatch('hide');
+};
+
+GroupChatWindow.prototype.setFilter = function (value) {
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
-	_.dom.css(effectContainer, {"-webkit-filter": value});
+	_.dom.css(effectContainer, {
+		"-webkit-filter": value
+	});
 };
 
 
-GroupChatWindow.prototype.on = function(eventType, fn){
+GroupChatWindow.prototype.on = function (eventType, fn) {
 	var me = this;
 	me._eventsListener[eventType] = fn;
 };
 
-GroupChatWindow.prototype.dispatch = function(eventType, param){
+GroupChatWindow.prototype.dispatch = function (eventType, param) {
 	var me = this;
 	var fn = me._eventsListener[eventType];
 	fn && fn(param);
 };
 
-GroupChatWindow.prototype.getTime = function(){
+GroupChatWindow.prototype.getTime = function () {
 	var d = new Date();
-	var arr = [], ti = [];
+	var arr = [],
+		ti = [];
 	arr.push(d.getFullYear());
-	arr.push(d.getMonth()+1);
+	arr.push(d.getMonth() + 1);
 	arr.push(d.getDate());
 	ti.push(d.getHours());
 	ti.push(d.getMinutes());
 	ti.push(d.getSeconds());
-	return 	arr.join('-') + ' ' + ti.join(':');
+	return arr.join('-') + ' ' + ti.join(':');
 };
 
 window.GroupChatWindow = GroupChatWindow;

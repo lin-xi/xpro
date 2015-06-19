@@ -1,10 +1,21 @@
 <div class="xmeet-chat-window">
 	<div class="window-title">
 		<img width="48" height="48" src="api/img/chat.png"/>
-		<span class="title">交流群</span>
+		<span class="title"></span>
 		<span class="setting"></span>
+		<span class="userList"></span>
+		<span class="exit"></span>
 	</div>
-	<div id="" class="window-body chat-messages">
+	<div class="window-body chat-messages">
+		<div class="setting-panel">
+			昵称：<input class="nickName" type="text"/>
+			<div class="close">×</div>
+		</div>
+		<div class="userList-panel">
+			<ul class="users">
+			</ul>
+			<div class="close">×</div>
+		</div>
 		<div class="chat-messages-list"></div>
 	</div>
 

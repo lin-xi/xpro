@@ -1,12 +1,14 @@
-function SocketChat(roomName){
+function SocketChat(name, roomId, roomName) {
 	this._eventsListener = {};
+	this.name = name;
 	this.room = {
+		id: roomId,
 		name: roomName
 	};
 	this.init();
 }
 
-SocketChat.prototype.init = function(){
+SocketChat.prototype.init = function () {
 	var me = this;
 	// ws://meet.xpro.im:8080/xgate/websocket/{$xnest_id}?nickname={$nickname}
 	// var url = "{{url}}/{{$xnest_id}}?nickname={{$nickname}}";
@@ -17,53 +19,50 @@ SocketChat.prototype.init = function(){
 	// });
 
 	var config = {
-        wsUrl: 'ws://meet.xpro.im:8080/xgate/websocket/lurenjia',
-        linkKey: 'temp',//'http://www.baidu.com',
-        host: '/meet.xpro.im'
-    };
-    var url = config.wsUrl + md5(config.host + config.linkKey);
+		wsUrl: 'ws://meet.xpro.im:8080/xgate/websocket/'
+	};
+	var url = config.wsUrl + md5(location.host + me.room.id) + '?nickname=' + me.name;
 	var socket = me.socket = new WebSocket(url);
-	socket.onopen = function(e){
+	socket.onopen = function (e) {
 		console.log('open');
 	};
-	socket.onmessage = function(e){
-		console.log(e.data);
+	socket.onmessage = function (e) {
 		me.parseMessage(JSON.parse(e.data));
 	};
-	socket.onerror = function(e){
+	socket.onerror = function (e) {
 		console.log(e);
 	};
-	socket.onclose = function(e){
-	};
+	socket.onclose = function (e) {};
 };
 
-SocketChat.prototype.send = function(messsage){
+SocketChat.prototype.send = function (messsage) {
 	this.socket.send(messsage);
 };
 
-SocketChat.prototype.parseMessage = function(data){
+SocketChat.prototype.parseMessage = function (data) {
 	var me = this;
-	switch(data.type){
+	switch (data.type) {
 		case 'self':
 			me.dispatch('connected', wrapData('connected'));
-		break;
+			break;
 		case 'member_count':
 			//do nothing
-		break;
+			break;
 		case 'members':
 			me.dispatch('members', wrapData('members'));
-		break;
+			break;
 		case 'join':
 			me.dispatch('joined', wrapData('joined'));
-		break;
+			break;
 		case 'leave':
 			me.dispatch('leaved', wrapData('leaved'));
-		break;
+			break;
 		case 'normal':
 			me.dispatch('receive', wrapData('receive'));
-		break;
+			break;
 	}
-	function wrapData(type){
+
+	function wrapData(type) {
 		return {
 			type: type,
 			roomId: data.xnest,
@@ -74,12 +73,12 @@ SocketChat.prototype.parseMessage = function(data){
 	}
 };
 
-SocketChat.prototype.on = function(eventType, fn){
+SocketChat.prototype.on = function (eventType, fn) {
 	var me = this;
 	me._eventsListener[eventType] = fn;
 };
 
-SocketChat.prototype.dispatch = function(eventType, param){
+SocketChat.prototype.dispatch = function (eventType, param) {
 	var me = this;
 	var fn = me._eventsListener[eventType];
 	fn && fn(param);

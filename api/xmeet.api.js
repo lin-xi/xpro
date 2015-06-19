@@ -1,480 +1,655 @@
-﻿/*--------------------------------------------------------*/
-	var _uid = 0;
-	var _ = function(obj) {
+/*--------------------------------------------------------*/
+var _uid = 0;
+var _ = function (obj) {};
+//isFunction
+if (typeof (/./) !== 'function') {
+	_.isFunction = function (obj) {
+		return typeof obj === 'function';
 	};
-	//isFunction
-	if (typeof (/./) !== 'function') {
-		_.isFunction = function(obj) {
-			return typeof obj === 'function';
-		};
+}
+//isObject
+_.isObject = function (obj) {
+	return obj === Object(obj);
+};
+//isArray
+_.isArray = function (obj) {
+	if (obj.length !== undefined) {
+		return true;
+	} else {
+		return toString.call(obj) == '[object Array]';
 	}
-	//isObject
-	_.isObject = function(obj) {
-    	return obj === Object(obj);
-  	};
-  	 //isArray
-    _.isArray = function(obj) {
-    	if(obj.length !== undefined){
-    		return true;
-    	}else{
-    		return toString.call(obj) == '[object Array]';
-    	}
-  	};
-  	_.isEmptyObject = function(obj) {
-    	if (obj == null) return true;
-    	for (var key in obj) if (_.has(obj, key)) return false;
-    	return true;
-  	};
-	//trim
-	_.trim = function(str){
-		if (!str) return '';
-		return str.replace(/^\s*|\s*$/g, '');
-    };
-    _.has = function(obj, key) {
-    	return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
-  	};
-    _.keys = function(obj) {
-	    if (!_.isObject(obj)) return [];
-	    if (Object.keys) return Object.keys(obj);
-	    var keys = [];
-	    for (var key in obj) if (_.has(obj, key)) keys.push(key);
-	    return keys;
-  	};
-  	//each
-    _.each = function(obj, iterator, context) {
-    	if (obj == null) return obj;
-	    if (obj.length === +obj.length) {
-	      	for (var i = 0, length = obj.length; i < length; i++) {
-	        	if (iterator.call(context, i, obj[i], obj)) return;
-	      	}
-	    } else {
-	      	var keys = _.keys(obj);
-	      	for (var i = 0, length = keys.length; i < length; i++) {
-	        	if (iterator.call(context, keys[i], obj[keys[i]], obj)) return;
-	      	}
-	    }
-    	return obj;
-  	};
-  	//extend
-  	_.extend = function(obj) {
-    	if (!_.isObject(obj)) return obj;
-	    _.each(Array.prototype.slice.call(arguments, 1), function(i, source) {
-	      	for (var prop in source) {
-	        	obj[prop] = source[prop];
-	      	}
-	    });
-    	return obj;
-  	};
-  	_.copy = function(obj){
-  		if (!_.isObject(obj)) return obj;
-	    _.each(Array.prototype.slice.call(arguments, 1), function(i, source) {
-	      	for (var prop in source) {
-	        	obj.prototype[prop] = source[prop];
-	      	}
-	    });
-    	return obj;
-  	};
-  	//clone
-  	_.clone = function(obj) {
-    	if (!_.isObject(obj)) return obj;
-		return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
-  	};
-  	_.param = function(obj) {
-  		var temp = [];
-  		_.each(obj, function(key, item){
-  			temp.push(key+'='+ encodeURIComponent(item));
-  		});
-  		return temp.join('&');
-  	};
-  	_.md5 = function(n){
-  		var nc = n || 3, i=0;
-    	var v = (+new Date()).toString(32);
-    	for ( ; i < 5; i++ ) {
-            v += Math.floor( Math.random() * 65535 ).toString(32);
-        }
-    	return v;
-	};
-	_.uuid = function(){
-		return ++_uid;
-	};
-	_.render = function(template, data, func){
-		return template.replace(/\{\{(.*?)\}\}/g, function(s0, s1){
-			if(_.isFunction(func)){
-				return func(s1, data);
-			}else{
-				var key, val, filter;
-				if(s1.indexOf('|')>0){
-		    		var parts = s1.split('|');
-		    		key = _.trim(parts[0]),
-	    			filter = _.trim(parts[1]);
-		    	}else{
-		    		key = _.trim(s1);
-		    	}
-		    	var ks;
-		    	if(key.indexOf('.') != -1){
-		    		var ks = key.split('.');
-		    		var val = data[ks[0]];
-		    		_.each(ks, function(i, k){
-		    			i>0 && val && (val = val[k]);
-		    		});
-		    	}else{
-		    		val = data[key];
-		    	}
-				if(filter){
-					var mat = filter.match(/\s*in(\{.*?\})/);
-					if(mat && mat.length > 1){
-						var json =(new Function("", "return "+mat[1]))();
-						json && (val = json[val] ? json[val] : '');
-					}else{
-						if(func.filter && func.filter[filter]){
-							val = func.filter[filter](val);
-						}else{
-							console.error('filter['+ filter +'] not exist');
-						}
+};
+_.isEmptyObject = function (obj) {
+	if (obj == null) return true;
+	for (var key in obj)
+		if (_.has(obj, key)) return false;
+	return true;
+};
+//trim
+_.trim = function (str) {
+	if (!str) return '';
+	return str.replace(/^\s*|\s*$/g, '');
+};
+_.has = function (obj, key) {
+	return obj != null && Object.prototype.hasOwnProperty.call(obj, key);
+};
+_.keys = function (obj) {
+	if (!_.isObject(obj)) return [];
+	if (Object.keys) return Object.keys(obj);
+	var keys = [];
+	for (var key in obj)
+		if (_.has(obj, key)) keys.push(key);
+	return keys;
+};
+//each
+_.each = function (obj, iterator, context) {
+	if (obj == null) return obj;
+	if (obj.length === +obj.length) {
+		for (var i = 0, length = obj.length; i < length; i++) {
+			if (iterator.call(context, i, obj[i], obj)) return;
+		}
+	} else {
+		var keys = _.keys(obj);
+		for (var i = 0, length = keys.length; i < length; i++) {
+			if (iterator.call(context, keys[i], obj[keys[i]], obj)) return;
+		}
+	}
+	return obj;
+};
+//extend
+_.extend = function (obj) {
+	if (!_.isObject(obj)) return obj;
+	_.each(Array.prototype.slice.call(arguments, 1), function (i, source) {
+		for (var prop in source) {
+			obj[prop] = source[prop];
+		}
+	});
+	return obj;
+};
+_.copy = function (obj) {
+	if (!_.isObject(obj)) return obj;
+	_.each(Array.prototype.slice.call(arguments, 1), function (i, source) {
+		for (var prop in source) {
+			obj.prototype[prop] = source[prop];
+		}
+	});
+	return obj;
+};
+//clone
+_.clone = function (obj) {
+	if (!_.isObject(obj)) return obj;
+	return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
+};
+_.param = function (obj) {
+	var temp = [];
+	_.each(obj, function (key, item) {
+		temp.push(key + '=' + encodeURIComponent(item));
+	});
+	return temp.join('&');
+};
+_.md5 = function (n) {
+	var nc = n || 3,
+		i = 0;
+	var v = (+new Date()).toString(32);
+	for (; i < 5; i++) {
+		v += Math.floor(Math.random() * 65535).toString(32);
+	}
+	return v;
+};
+_.uuid = function () {
+	return ++_uid;
+};
+_.render = function (template, data, func) {
+	return template.replace(/\{\{(.*?)\}\}/g, function (s0, s1) {
+		if (_.isFunction(func)) {
+			return func(s1, data);
+		} else {
+			var key, val, filter;
+			if (s1.indexOf('|') > 0) {
+				var parts = s1.split('|');
+				key = _.trim(parts[0]),
+					filter = _.trim(parts[1]);
+			} else {
+				key = _.trim(s1);
+			}
+			var ks;
+			if (key.indexOf('.') != -1) {
+				var ks = key.split('.');
+				var val = data[ks[0]];
+				_.each(ks, function (i, k) {
+					i > 0 && val && (val = val[k]);
+				});
+			} else {
+				val = data[key];
+			}
+			if (filter) {
+				var mat = filter.match(/\s*in(\{.*?\})/);
+				if (mat && mat.length > 1) {
+					var json = (new Function("", "return " + mat[1]))();
+					json && (val = json[val] ? json[val] : '');
+				} else {
+					if (func.filter && func.filter[filter]) {
+						val = func.filter[filter](val);
+					} else {
+						console.error('filter[' + filter + '] not exist');
 					}
 				}
-				return val;
 			}
-		});
-	};
-	_.loadCss = function(path) {
-        if (path) {
-        	var head = document.getElementsByTagName('head')[0];
-            var link = document.createElement('link');
-            link.href = path;
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            head.appendChild(link);
-        }
-    };
-    _.loadJs = function(path, fn) {
-    	var head = document.getElementsByTagName('head')[0];
-        var script = document.createElement('script');
-        script.onreadystatechange = function() {
-            if (this.readyState == 'complete') {
-                fn && fn();
-            }
-        }
-        script.type = 'text/javascript';
-        script.src = url;
-        head.appendChild(script);
-        return script;
-    };
-    _.ajax = (function(){
-        function send(url, method, params, postData, cb, type) {
-            var xhr = null;
-			if (window.XMLHttpRequest){
-	  			xhr = new XMLHttpRequest();
-	  		} else if (window.ActiveXObject){
-		  		xhr = new ActiveXObject("Microsoft.XMLHTTP");
-		  	}
-		  	if (xhr != null){
-		  		var fullUrl = url, urlParam = _.param(params);
-		  		if(urlParam){
-		  			fullUrl = url + '?' + urlParam;
-		  		}
-		  		// '', arraybuffer, blob, document, json, text
-		  		if(type){
-		  			xhr.responseType = type;
-		  		}
-	            xhr.open(method, fullUrl, true);
-	            xhr.onreadystatechange = function() {
-	                if (xhr.readyState == 4) {
-	                	if (xhr.status==200){
-		                    var data = xhr.responseText;
-		                    cb && cb(data);
-		                }
-	                }
-	            }
-	        }
-            var body;
-            if (postData) {
-                var bodies = [];
-                for (var name in postData) {
-                    bodies.push(name + '=' + encodeURIComponent(postData[name]));
-                }
-                body = bodies.join('&');
-                if (body.length) {
-                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
-                }        
-            }
-            xhr.send(body);
-        }
-        return {
-	        get: function(url, params, cb, type) {
-	            send(url, 'GET', params, null, cb, type);
-	        },
-	        post: function(url, params, postData, cb) {
-	            send(url, 'POST', params, postData, cb);
-	        }
-	    };
-    })();
-  	/*--------------------------------------------------------*/
-  	_.dom = {};
-  	_.dom.create = function(htmlString){
-  		var div = document.createElement('div');
-  		div.innerHTML = htmlString;
-  		return Array.prototype.slice.call(div.children);
-  	};
-  	_.dom.get = function(queryString){
-  		if(typeof(queryString) == 'string'){
-  			return document.querySelectorAll(queryString);
-  		} else {
-  			return [queryString];
-  		}
-  	};
-  	_.dom.hasClass = function(dom, name){
-  		var d = _.dom.get(dom);
-  		var reg = new RegExp(name + '\\b', 'g');
-  		return d[0].className.match(reg);
-  	};
-  	_.dom.addClass = function(dom, name){
-  		if(!_.hasClass(dom, name)){
-  			dom.className += ' '+name;
-  		}
-  		return dom;
-  	};
-  	_.dom.removeClass = function(dom, name){
-  		var cname = dom.ClassName;
-  		if(_.hasClass(dom, name)){
-  			dom.className.replace(name, '');
-  		}
-  		return dom;
-  	};
-  	_.dom.css = function(queryString, property, value){
-  		var doms = _.dom.get(queryString);
-      	if (arguments.length < 3) {
-        	var computedStyle, element = doms[0]
-        	if(!element) return;
-        	computedStyle = getComputedStyle(element, '')
-	        if (typeof property == 'string')
-	          	return element.style[camelize(property)] || computedStyle.getPropertyValue(property)
-	        else if (_.isArray(property)) {
-	          	var props = {}
-	          	_.each(property, function(i, prop){
-	            	props[prop] = (element.style[camelize(prop)] || computedStyle.getPropertyValue(prop))
-	          	})
-	          	return props
-	        }
-      	}
-      	var css = ''
-      	if (typeof(property) == 'string') {
-        	if (!value && value !== 0)
-	          	_.each(doms, function(i, ele){
-	          		ele.style.removeProperty(dasherize(property));
-	          	});
-	        else
-	          	css = dasherize(property) + ":" + maybeAddPx(property, value)
-      	} else {
-        	for (key in property)
-          		if (!property[key] && property[key] !== 0)
-            		_.each(doms, function(i, ele){
-            			ele.style.removeProperty(dasherize(key));
-            		});
-          		else
-            		css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';'
-      	}
-      	_.each(doms, function(i, ele){
-      		ele.style.cssText += (';' + css);
-      	});
-
-      	function dasherize(str) {
-	    	return str.replace(/::/g, '/')
-	           .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
-	           .replace(/([a-z\d])([A-Z])/g, '$1_$2')
-	           .replace(/_/g, '-')
-	           .toLowerCase()
-	 	}
-	 	function camelize(str){
-	 		return str.replace(/-+(.)?/g, function(match, chr){
-	 			return chr ? chr.toUpperCase() : ''
-	 		});
-	 	}
-		function maybeAddPx(name, value) {
-			var cssNumber = { 'column-count': 1, 'columns': 1, 'font-weight': 1, 'line-height': 1,'opacity': 1, 'z-index': 1, 'zoom': 1 };
-	    	return (typeof value == "number" && !cssNumber[dasherize(name)]) ? value + "px" : value
-	  	}
-  	};
-  	_.dom.offset = function(queryString){
-  		var doms = _.dom.get(queryString);
-      	if (!doms) return
-      	var obj = doms[0].getBoundingClientRect()
-		return {
-			left: obj.left + window.pageXOffset,
-			top: obj.top + window.pageYOffset,
-			width: Math.round(obj.width),
-			height: Math.round(obj.height)
+			return val;
 		}
-    },
-  	_.dom.position = function(queryString) {
-  		var doms = _.dom.get(queryString);
-      	if (!doms) return
-
-      	var elem = doms[0],
-        	// Get *real* offsetParent
-        	offsetParent = _.dom.offsetParent(),
-        	// Get correct offsets
-        	offset       = _.dom.offset(elem),
-        	parentOffset = _.dom.offset(offsetParent[0]);
-		// Subtract element margins
-		// note: when an element has margin: auto the offsetLeft and marginLeft
-		// are the same in Safari causing offset.left to incorrectly be 0
-		offset.top  -= parseFloat( _.dom.css(elem, 'margin-top')) || 0
-  		offset.left -= parseFloat( _.dom.css(elem, 'margin-left')) || 0
-  		// Add offsetParent borders
-  		parentOffset.top  += parseFloat( _.dom.css(offsetParent[0], 'border-top-width')) || 0
-  		parentOffset.left += parseFloat( _.dom.css(offsetParent[0], 'border-left-width')) || 0
-  		// Subtract the two offsets
-  		return {
-    		top:  offset.top  - parentOffset.top,
-    		left: offset.left - parentOffset.left
-  		}
-	};
-    _.dom.offsetParent = function(queryString) {
-    	var doms = _.dom.get(queryString);
-      	return doms.map(function(){
-        	var parent = this.offsetParent || document.body;
-        	while (parent && !/^(?:body|html)$/i.test(parent.nodeName) && _.dom.css(parent, "position") == "static")
-          		parent = parent.offsetParent
-        	return parent
-      	});
-    };
-  	_.dom.on = function(target, eventType, fn){
-		var eles = _.dom.get(target);
-		_.each(eles, function(index, item){
-			DomEvent.on(eventType, item, fn);
-		});
-		return eles;
-  	};
-  	_.dom.off = function(target, eventType, fn){
-  		if(typeof(target) == 'string'){
-  			var eles = _.dom.get(target);
-  			eles && _.each(eles, function(index, item){
-  				DomEvent.off(eventType, item, fn);
-  			});
-  			return eles;
-  		}else{
-  			DomEvent.off(eventType, target, fn);
-  			return target;
-  		}
-  	};
-  	_.dom.show = function(target){
-  		_.each(_.dom.get(target), function(index, item){
-			item.style.display = "block";
-  		});
-  	};
-  	_.dom.hide = function(target){
-  		_.each(_.dom.get(target), function(index, item){
-			item.style.display = "none";
-  		});
-  	};
-  	_.dom.toggle = function(target){
-  		var dis = _.dom.css(target, 'display');
-  		dis == 'none' ? _.dom.show(target) : _.dom.hide(target);
-  	};
-  	/*--------------------------------------------------------*/
-  	var DomEvent = {
-	    on: function (evtName, element, listener, capture) {
-	        var evt         = '',
-	            useCapture  = (capture === undefined) ? true : capture,
-	            handler     = null;
-	        if (window.addEventListener === undefined) {
-	            evt = 'on' + evtName;
-	            handler = function (evt, listener) {
-	                element.attachEvent(evt, listener);
-	                return listener;
-	            };
-	        } else {
-	            evt = evtName;
-	            handler = function (evt, listener, useCapture) {
-	                element.addEventListener(evt, listener, useCapture);
-	                return listener;
-	            };
-	        }
-	        return handler.apply(element, [evt, function (ev) {
-	            var e   = ev || event,
-	                src = e.srcElement || e.target;
-	            listener(e, src);
-	        }, useCapture]);
-	    },
-	    off: function (evtName, element, listener, capture) {
-	        var evt = '',
-	            useCapture  = (capture === undefined) ? true : capture;
-	        if (window.removeEventListener === undefined) {
-	            evt = 'on' + evtName;
-        		// element.detachEvent(evt, listener);
-            	element[evt] = null;
-	        } else {
-	            evt = evtName;
-	            element.removeEventListener(evt, listener, useCapture);
-	        }
-	    },
-	    stopPropagation: function (evt) {
-	        evt.cancelBubble = true;
-	        if (evt.stopPropagation) {
-	            evt.stopPropagation();
-	        }
-	    },
-	    preventDefault: function (evt) {
-	        if (evt.preventDefault) {
-	            evt.preventDefault();
-	        } else {
-	            evt.returnValue = false;
-	        }
-	    }
-	};
-	var Event = {
-		on: function(eventType, func){
-			if(!this._events){
-				this._events = {};
+	});
+};
+_.loadCss = function (path) {
+	if (path) {
+		var head = document.getElementsByTagName('head')[0];
+		var link = document.createElement('link');
+		link.href = path;
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		head.appendChild(link);
+	}
+};
+_.loadJs = function (path, fn) {
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.onreadystatechange = function () {
+		if (this.readyState == 'complete') {
+			fn && fn();
+		}
+	}
+	script.type = 'text/javascript';
+	script.src = url;
+	head.appendChild(script);
+	return script;
+};
+_.ajax = (function () {
+	function send(url, method, params, postData, cb, type) {
+		var xhr = null;
+		if (window.XMLHttpRequest) {
+			xhr = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		if (xhr != null) {
+			var fullUrl = url,
+				urlParam = _.param(params);
+			if (urlParam) {
+				fullUrl = url + '?' + urlParam;
 			}
-			this._events[eventType] = func;
-		},
-		off: function(eventType){
-			delete this._events[eventType];
-		},
-		dispatchEvent: function(){
-			var args = Array.prototype.slice.call(arguments, 1);
-			var eventType = arguments[0];
-			if(eventType && this._events){
-				var handler = this._events[eventType];
-				handler && handler.apply(this, _.isArray(args)? args : [args]);
+			// '', arraybuffer, blob, document, json, text
+			if (type) {
+				xhr.responseType = type;
+			}
+			xhr.open(method, fullUrl, true);
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == 4) {
+					if (xhr.status == 200) {
+						var data = xhr.responseText;
+						cb && cb(data);
+					}
+				}
 			}
 		}
+		var body;
+		if (postData) {
+			var bodies = [];
+			for (var name in postData) {
+				bodies.push(name + '=' + encodeURIComponent(postData[name]));
+			}
+			body = bodies.join('&');
+			if (body.length) {
+				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			}
+		}
+		xhr.send(body);
+	}
+	return {
+		get: function (url, params, cb, type) {
+			send(url, 'GET', params, null, cb, type);
+		},
+		post: function (url, params, postData, cb) {
+			send(url, 'POST', params, postData, cb);
+		}
 	};
-  	/*--------------------------------------------------------*/(function (window) {
-	
+})();
+/*--------------------------------------------------------*/
+_.dom = {};
+_.dom.create = function (htmlString) {
+	var div = document.createElement('div');
+	div.innerHTML = htmlString;
+	return Array.prototype.slice.call(div.children);
+};
+_.dom.get = function (queryString) {
+	if (typeof (queryString) == 'string') {
+		return document.querySelectorAll(queryString);
+	} else {
+		return [queryString];
+	}
+};
+_.dom.hasClass = function (dom, name) {
+	var d = _.dom.get(dom);
+	var reg = new RegExp(name + '\\b', 'g');
+	return d[0].className.match(reg);
+};
+_.dom.addClass = function (dom, name) {
+	if (!_.dom.hasClass(dom, name)) {
+		dom.className += ' ' + name;
+	}
+	return dom;
+};
+_.dom.removeClass = function (dom, name) {
+	var cname = dom.ClassName;
+	if (_.dom.hasClass(dom, name)) {
+		dom.className = dom.className.replace(name, '');
+	}
+	return dom;
+};
+_.dom.css = function (queryString, property, value) {
+	var doms = _.dom.get(queryString);
+	if (arguments.length < 3) {
+		var computedStyle, element = doms[0]
+		if (!element) return;
+		computedStyle = getComputedStyle(element, '')
+		if (typeof property == 'string')
+			return element.style[camelize(property)] || computedStyle.getPropertyValue(property)
+		else if (_.isArray(property)) {
+			var props = {}
+			_.each(property, function (i, prop) {
+				props[prop] = (element.style[camelize(prop)] || computedStyle.getPropertyValue(prop))
+			})
+			return props
+		}
+	}
+	var css = ''
+	if (typeof (property) == 'string') {
+		if (!value && value !== 0)
+			_.each(doms, function (i, ele) {
+				ele.style.removeProperty(dasherize(property));
+			});
+		else
+			css = dasherize(property) + ":" + maybeAddPx(property, value)
+	} else {
+		for (key in property)
+			if (!property[key] && property[key] !== 0)
+				_.each(doms, function (i, ele) {
+					ele.style.removeProperty(dasherize(key));
+				});
+			else
+				css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';'
+	}
+	_.each(doms, function (i, ele) {
+		ele.style.cssText += (';' + css);
+	});
 
-	function Chat(){
-
+	function dasherize(str) {
+		return str.replace(/::/g, '/')
+			.replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+			.replace(/([a-z\d])([A-Z])/g, '$1_$2')
+			.replace(/_/g, '-')
+			.toLowerCase()
 	}
 
+	function camelize(str) {
+		return str.replace(/-+(.)?/g, function (match, chr) {
+			return chr ? chr.toUpperCase() : ''
+		});
+	}
 
+	function maybeAddPx(name, value) {
+		var cssNumber = {
+			'column-count': 1,
+			'columns': 1,
+			'font-weight': 1,
+			'line-height': 1,
+			'opacity': 1,
+			'z-index': 1,
+			'zoom': 1
+		};
+		return (typeof value == "number" && !cssNumber[dasherize(name)]) ? value + "px" : value
+	}
+};
+_.dom.offset = function (queryString) {
+	var doms = _.dom.get(queryString);
+	if (!doms) return
+	var obj = doms[0].getBoundingClientRect()
+	return {
+		left: obj.left + window.pageXOffset,
+		top: obj.top + window.pageYOffset,
+		width: Math.round(obj.width),
+		height: Math.round(obj.height)
+	}
+};
+_.dom.position = function (queryString) {
+	var doms = _.dom.get(queryString);
+	if (!doms) return
+
+	var elem = doms[0],
+		// Get *real* offsetParent
+		offsetParent = _.dom.offsetParent(),
+		// Get correct offsets
+		offset = _.dom.offset(elem),
+		parentOffset = _.dom.offset(offsetParent[0]);
+	// Subtract element margins
+	// note: when an element has margin: auto the offsetLeft and marginLeft
+	// are the same in Safari causing offset.left to incorrectly be 0
+	offset.top -= parseFloat(_.dom.css(elem, 'margin-top')) || 0
+	offset.left -= parseFloat(_.dom.css(elem, 'margin-left')) || 0
+		// Add offsetParent borders
+	parentOffset.top += parseFloat(_.dom.css(offsetParent[0], 'border-top-width')) || 0
+	parentOffset.left += parseFloat(_.dom.css(offsetParent[0], 'border-left-width')) || 0
+		// Subtract the two offsets
+	return {
+		top: offset.top - parentOffset.top,
+		left: offset.left - parentOffset.left
+	}
+};
+_.dom.offsetParent = function (queryString) {
+	var doms = _.dom.get(queryString);
+	return doms.map(function () {
+		var parent = this.offsetParent || document.body;
+		while (parent && !/^(?:body|html)$/i.test(parent.nodeName) && _.dom.css(parent, "position") == "static")
+			parent = parent.offsetParent
+		return parent
+	});
+};
+_.dom.on = function (target, eventType, fn) {
+	var eles = _.dom.get(target);
+	_.each(eles, function (index, item) {
+		DomEvent.on(eventType, item, fn);
+	});
+	return eles;
+};
+_.dom.off = function (target, eventType, fn) {
+	if (typeof (target) == 'string') {
+		var eles = _.dom.get(target);
+		eles && _.each(eles, function (index, item) {
+			DomEvent.off(eventType, item, fn);
+		});
+		return eles;
+	} else {
+		DomEvent.off(eventType, target, fn);
+		return target;
+	}
+};
+_.dom.show = function (target) {
+	_.each(_.dom.get(target), function (index, item) {
+		item.style.display = "block";
+	});
+};
+_.dom.hide = function (target) {
+	_.each(_.dom.get(target), function (index, item) {
+		item.style.display = "none";
+	});
+};
+_.dom.toggle = function (target) {
+	var dis = _.dom.css(target, 'display');
+	dis == 'none' ? _.dom.show(target) : _.dom.hide(target);
+};
+/*--------------------------------------------------------*/
+var DomEvent = {
+	on: function (evtName, element, listener, capture) {
+		var evt = '',
+			useCapture = (capture === undefined) ? true : capture,
+			handler = null;
+		if (window.addEventListener === undefined) {
+			evt = 'on' + evtName;
+			handler = function (evt, listener) {
+				element.attachEvent(evt, listener);
+				return listener;
+			};
+		} else {
+			evt = evtName;
+			handler = function (evt, listener, useCapture) {
+				element.addEventListener(evt, listener, useCapture);
+				return listener;
+			};
+		}
+		return handler.apply(element, [evt, function (ev) {
+			var e = ev || event,
+				src = e.srcElement || e.target;
+			listener(e, src);
+		}, useCapture]);
+	},
+	off: function (evtName, element, listener, capture) {
+		var evt = '',
+			useCapture = (capture === undefined) ? true : capture;
+		if (window.removeEventListener === undefined) {
+			evt = 'on' + evtName;
+			// element.detachEvent(evt, listener);
+			element[evt] = null;
+		} else {
+			evt = evtName;
+			element.removeEventListener(evt, listener, useCapture);
+		}
+	},
+	stopPropagation: function (evt) {
+		evt.cancelBubble = true;
+		if (evt.stopPropagation) {
+			evt.stopPropagation();
+		}
+	},
+	preventDefault: function (evt) {
+		if (evt.preventDefault) {
+			evt.preventDefault();
+		} else {
+			evt.returnValue = false;
+		}
+	}
+};
+var Event = {
+	on: function (eventType, func) {
+		if (!this._events) {
+			this._events = {};
+		}
+		this._events[eventType] = func;
+	},
+	off: function (eventType) {
+		delete this._events[eventType];
+	},
+	dispatchEvent: function () {
+		var args = Array.prototype.slice.call(arguments, 1);
+		var eventType = arguments[0];
+		if (eventType && this._events) {
+			var handler = this._events[eventType];
+			handler && handler.apply(this, _.isArray(args) ? args : [args]);
+		}
+	}
+};
+/*--------------------------------------------------------*/(function (window) {
+
+	var sock, win, members;
+
+	function GroupChat(roomId, roomName) {
+		this.roomId = roomId;
+		this.roomName = roomName;
+		this.initialize();
+	}
+
+	GroupChat.prototype.initialize = function () {
+		var me = this;
+		_.loadCss('api/xmeet.api.css');
+
+		var tpl_chat = "<div class=\"xmeet-chat-logo\">\n	<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n</div>\n";
+		var nodes = _.dom.create(tpl_chat);
+		document.body.appendChild(nodes[0]);
+
+		_.dom.on('.xmeet-chat-logo img', 'click', function (e) {
+			// _.dom.toggle('.xmeet-chat-room');
+			_.dom.hide('.xmeet-chat-logo');
+			var name = me.name = generateName();
+			if (win) {
+				win.show();
+			} else {
+				me.createChatWindow(name);
+			}
+		});
+
+		// var tpl_room = "<div class=\"xmeet-chat-room\">\n	<div class=\"box-body\">\n		<p>\n			<span class=\"logo\">\n				<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n			</span>\n		</p>\n		<p class=\"room\">XMeet</p>\n		<p><input class=\"name\" type=\"text\"/></p>\n	</div>\n	<div class=\"box-bottom\">\n		<a id=\"room-enter\" class=\"btn\">进入聊天室</a>\n	</div>\n</div>";
+		// var nodes = _.dom.create(tpl_room);
+		// document.body.appendChild(nodes[0]);
+		// var name = generateName();
+		// _.dom.get('.xmeet-chat-room .name')[0].value = name;
+		// _.dom.on('#room-enter', 'click', function (e) {
+		// 	_.dom.toggle('.xmeet-chat-room');
+		// 	me.createChatWindow(name);
+		// });
+	};
+
+	GroupChat.prototype.createChatWindow = function (name) {
+		var me = this;
+		if (!sock) {
+			sock = new SocketChat(me.name, me.roomId, me.roomName);
+			sock.on('connected', function (data) {
+				win = new GroupChatWindow(data.roomId, me.roomName, {
+					uid: data.from,
+					name: name
+				});
+				me.bindChatEvent();
+			});
+
+			sock.on('members', function (data) {
+				members = {};
+				for (var i = data.content.length; i > 0; i--) {
+					var u = data.content[i - 1];
+					members[u.pid] = {
+						uid: u.pid,
+						name: u.nickname
+					};
+				}
+				win.updateUsers(members);
+			});
+
+			sock.on('joined', function (data) {
+				members[data.from] = {
+					uid: data.from,
+					name: data.content
+				};
+			});
+
+			sock.on('receive', function (data) {
+				var u = members[data.from];
+				if (u) {
+					win.receiveMessage(data.content, u, data.time);
+				}
+			});
+		}
+	};
+
+	GroupChat.prototype.bindChatEvent = function () {
+		win.on('send', function (data) {
+			sock.send(data.message);
+		});
+
+		win.on('hide', function (data) {
+			_.dom.show('.xmeet-chat-logo');
+		});
+	};
+
+	function generateName() {
+		var names = {
+			'Cat': '凯特',
+			'Dog': '多格',
+			'Zebra': '泽布拉',
+			'Rihno': '蕾哈娜',
+			'Elephant': '爱丽芬',
+			'Hippo': '黑普',
+			'Giraffe': '格拉菲',
+			'Duck': '达克',
+			'Leopard': '莱昂帕多',
+			'Goose': '古斯',
+			'Lion': '莱恩',
+			'Fox': '福克斯',
+			'Wolf': '沃尔夫',
+			'Tigger': '泰格',
+			'Beatles': '比特斯', //甲壳虫
+			'Eagle': '伊格',
+			'Goat': '勾特',
+			'Python': '派森',
+			'Cobra': '科波拉',
+			'Monkey': '芒可',
+			'Octopus': '奥克托帕斯', //章鱼
+			'Tortoise': '托特斯',
+			'Horse': '霍斯',
+			'Panda': '胖达',
+			'Kaola': '考拉',
+			'Boar': '伯恩', //野猪
+			'Squirrel': '斯奎尔',
+			'Rabbit': '拉比特',
+			'Sardine': '沙丁', //沙丁鱼
+			'Salmon': '莎尔蒙', //鲑鱼
+			'Sloth': '斯洛兹', //树懒
+			'buffalo': '巴伐罗', //水牛
+			'gnu': '格鲁', //角马
+			'jellyfish': '杰丽菲诗',
+			'shark': '沙奎尔',
+			'crocodile': '克拉克戴尔', //
+			'penguin': '平格温',
+			'pigeon': '匹金',
+			'bat': '波特', //蝙蝠
+			'lizard': '李札特', //蜥蜴
+			'mosquito': '马斯奎特', //蚊子
+			'frog': '弗洛格', //蚊子
+			'squid': '斯奎德', //乌贼
+			'lobster': '罗伯斯特', //龙虾
+			'ant': '安特',
+			'butterfly': '巴特弗莱',
+			'flamingo': '弗拉明戈', //火烈鸟
+			'peacock': '皮科克', //孔雀
+			'swan': '斯万', //天鹅
+			'spider': '斯派德尔', //蜘蛛
+			'owl': '欧尔',
+			'ostrich': '奥斯纯齐', //鸵鸟
+			'camel': '凯梅尔',
+			'crab': '克拉伯',
+			'mongoose': '芒古斯', //猫鼬
+			'deer': '迪尔',
+			'antelope': '艾迪路普', //羚羊
+			'mustang': '木斯唐', //野马
+		};
+		var keys = Object.keys(names);
+		return names[keys[Math.floor(keys.length * Math.random())]];
+	}
+
+	function getTemplate(name, fn) {
+		_.ajax.get('/api/' + name, null, function (text) {
+			fn(text);
+		});
+	}
 
 	var xmeet = {
-		Chat: Chat
+		Chat: function (roomId, roomName) {
+			var groupChat = new GroupChat(roomId, roomName);
+		}
 	};
 
 	window.XMeet = xmeet;
-})(window);
 
 
+	//boot
+	var scripts = document.getElementsByTagName('script');
+	for (var i = 0; i < scripts.length; i++) {
+		var s = scripts[i];
+		var src = s.getAttribute('src');
+		if (src && src.indexOf('xmeet.api.js') != -1) {
+			var params = {};
+			var paramsStr = src.split('?');
+			if (paramsStr.length > 0) {
+				var ps = paramsStr[1].split('&');
+				for (var i = 0, len = ps.length; i < len; i++) {
+					var kvs = ps[i].split('=');
+					var k = kvs[0] == 'roomid' ? 'roomId' : kvs[0];
+					k = kvs[0] == 'roomname' ? 'roomName' : kvs[0];
+					params[k] = kvs[1];
+				}
+			}
+			var roomId = params['roomId'] || _.md5();
+			var roomName = params['roomName'] || '';
+			new XMeet.Chat(roomId, roomName);
+			break;
+		}
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*!
+})(window);/*!
  * VERSION: 1.16.1
  * DATE: 2015-03-13
  * UPDATES AND DOCS AT: http://greensock.com
@@ -669,15 +844,17 @@ else if(this._totalTime=this._time=t,this._easeType){var u=t/h,p=this._easeType,
 			return (msw << 16) | (lsw & 0xFFFF);
 		}
 	}
-})();function SocketChat(roomName){
+})();function SocketChat(name, roomId, roomName) {
 	this._eventsListener = {};
+	this.name = name;
 	this.room = {
+		id: roomId,
 		name: roomName
 	};
 	this.init();
 }
 
-SocketChat.prototype.init = function(){
+SocketChat.prototype.init = function () {
 	var me = this;
 	// ws://meet.xpro.im:8080/xgate/websocket/{$xnest_id}?nickname={$nickname}
 	// var url = "{{url}}/{{$xnest_id}}?nickname={{$nickname}}";
@@ -688,53 +865,50 @@ SocketChat.prototype.init = function(){
 	// });
 
 	var config = {
-        wsUrl: 'ws://meet.xpro.im:8080/xgate/websocket/lurenjia',
-        linkKey: 'temp',//'http://www.baidu.com',
-        host: '/meet.xpro.im'
-    };
-    var url = config.wsUrl + md5(config.host + config.linkKey);
+		wsUrl: 'ws://meet.xpro.im:8080/xgate/websocket/'
+	};
+	var url = config.wsUrl + md5(location.host + me.room.id) + '?nickname=' + me.name;
 	var socket = me.socket = new WebSocket(url);
-	socket.onopen = function(e){
+	socket.onopen = function (e) {
 		console.log('open');
 	};
-	socket.onmessage = function(e){
-		console.log(e.data);
+	socket.onmessage = function (e) {
 		me.parseMessage(JSON.parse(e.data));
 	};
-	socket.onerror = function(e){
+	socket.onerror = function (e) {
 		console.log(e);
 	};
-	socket.onclose = function(e){
-	};
+	socket.onclose = function (e) {};
 };
 
-SocketChat.prototype.send = function(messsage){
+SocketChat.prototype.send = function (messsage) {
 	this.socket.send(messsage);
 };
 
-SocketChat.prototype.parseMessage = function(data){
+SocketChat.prototype.parseMessage = function (data) {
 	var me = this;
-	switch(data.type){
+	switch (data.type) {
 		case 'self':
 			me.dispatch('connected', wrapData('connected'));
-		break;
+			break;
 		case 'member_count':
 			//do nothing
-		break;
+			break;
 		case 'members':
 			me.dispatch('members', wrapData('members'));
-		break;
+			break;
 		case 'join':
 			me.dispatch('joined', wrapData('joined'));
-		break;
+			break;
 		case 'leave':
 			me.dispatch('leaved', wrapData('leaved'));
-		break;
+			break;
 		case 'normal':
 			me.dispatch('receive', wrapData('receive'));
-		break;
+			break;
 	}
-	function wrapData(type){
+
+	function wrapData(type) {
 		return {
 			type: type,
 			roomId: data.xnest,
@@ -745,224 +919,132 @@ SocketChat.prototype.parseMessage = function(data){
 	}
 };
 
-SocketChat.prototype.on = function(eventType, fn){
+SocketChat.prototype.on = function (eventType, fn) {
 	var me = this;
 	me._eventsListener[eventType] = fn;
 };
 
-SocketChat.prototype.dispatch = function(eventType, param){
+SocketChat.prototype.dispatch = function (eventType, param) {
 	var me = this;
 	var fn = me._eventsListener[eventType];
 	fn && fn(param);
 };
 
-window.SocketChat = SocketChat;(function (window) {
-	
-	var sock, win, members;
-
-	function GroupChat(){
-		this.initialize();
-	}
-
-	GroupChat.prototype.initialize = function(){
-		var me = this;
-		_.loadCss('api/xmeet.api.css');
-		
-		var tpl_chat = "<div class=\"xmeet-chat-logo\">\n	<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n</div>\n";
-		var nodes = _.dom.create(tpl_chat);
-		document.body.appendChild(nodes[0]);
-
-		_.dom.on('.xmeet-chat-logo img', 'click', function(e){
-			_.dom.toggle('.xmeet-chat-room');
-		});
-		
-		var tpl_room = "<div class=\"xmeet-chat-room\">\n	<div class=\"box-body\">\n		<p>\n			<span class=\"logo\">\n				<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n			</span>\n		</p>\n		<p class=\"room\">XMeet</p>\n		<p><input class=\"name\" type=\"text\"/></p>\n	</div>\n	<div class=\"box-bottom\">\n		<a id=\"room-enter\" class=\"btn\">进入聊天室</a>\n	</div>\n</div>";
-		var nodes = _.dom.create(tpl_room);
-		document.body.appendChild(nodes[0]);
-		var name = generateName();
-		_.dom.get('.xmeet-chat-room .name')[0].value = name;
-		_.dom.on('#room-enter', 'click', function(e){
-			_.dom.toggle('.xmeet-chat-room');
-			me.createChatWindow(name);
-		});
-	};
-
-	GroupChat.prototype.createChatWindow = function(name){
-		var me = this;
-		if(!sock){
-			sock = new SocketChat('交流群');
-			sock.on('connected', function(data){
-				win = new GroupChatWindow(data.roomId, {
-					uid: data.from,
-					name: name
-				});
-				me.bindChatEvent();
-			});
-
-			sock.on('members', function(data){
-				members = {};
-				for(var i=data.content.length; i>0; i--){
-					var u = data.content[i-1];
-					members[u.pid] = {
-						uid: u.pid,
-						name: u.nickname
-					};
-				}
-			});
-
-			sock.on('joined', function(data){
-				members[data.from] = {
-					uid: data.from,
-					name: data.content
-				};
-			});
-
-			sock.on('receive', function(data){
-				var u = members[data.from];
-				if(u){
-					win.receiveMessage(data.content, u, data.time);
-				}
-			});
-		}
-	};
-
-	GroupChat.prototype.bindChatEvent = function(){
-		win.on('send', function(data){
-			sock.send(data.message);
-		});
-	};
-
-	function generateName(){
-		var names = {
-			'Cat': '凯特',
-			'Dog': '多格',
-			'Zebra': '泽布拉',
-			'Rihno': '蕾哈娜', 
-			'Elephant': '爱丽芬', 
-			'Hippo': '黑普', 
-			'Giraffe': '格拉菲', 
-			'Duck': '达克', 
-			'Leopard': '莱昂帕多', 
-			'Goose': '古斯', 
-			'Lion': '莱恩', 
-			'Fox': '福克斯', 
-			'Wolf': '沃尔夫', 
-			'Tigger': '泰格',
-			'Beatles': '比特斯',    //甲壳虫
-			'Eagle': '伊格',
-			'Goat': '勾特',
-			'Python': '派森',
-			'Cobra': '科波拉',
-			'Monkey': '芒可',
-			'Octopus': '奥克托帕斯',  //章鱼
-			'Tortoise': '托特斯',
-			'Horse': '霍斯',
-			'Panda': '胖达',
-			'Kaola': '考拉',
-			'Boar': '伯恩',       //野猪
-			'Squirrel': '斯奎尔',
-			'Rabbit': '拉比特',
-			'Sardine': '沙丁',   //沙丁鱼
-			'Salmon': '莎尔蒙',  //鲑鱼
-			'Sloth': '斯洛兹',  //树懒
-			'buffalo': '巴伐罗',  //水牛
-			'gnu': '格鲁',  //角马
-			'jellyfish': '杰丽菲诗',
-			'shark': '沙奎尔',
-			'crocodile': '克拉克戴尔',  //
-			'penguin': '平格温',
-			'pigeon': '匹金',
-			'bat': '波特',  //蝙蝠
-			'lizard': '李札特',  //蜥蜴
-			'mosquito': '马斯奎特',  //蚊子
-			'frog': '弗洛格',  //蚊子
-			'squid': '斯奎德',  //乌贼
-			'lobster': '罗伯斯特',  //龙虾
-			'ant': '安特',
-			'butterfly': '巴特弗莱',
-			'flamingo': '弗拉明戈',  //火烈鸟
-			'peacock': '皮科克',  //孔雀
-			'swan': '斯万',  //天鹅
-			'spider': '斯派德尔',  //蜘蛛
-			'owl': '欧尔',
-			'ostrich': '奥斯纯齐', //鸵鸟
-			'camel': '凯梅尔',
-			'crab': '克拉伯',
-			'mongoose': '芒古斯', //猫鼬
-			'deer': '迪尔',
-			'antelope': '艾迪路普',  //羚羊
-			'mustang': '木斯唐',  //野马
-		};
-		var keys = Object.keys(names);
-		return names[keys[Math.floor(keys.length*Math.random())]];
-	}
-
-	function getTemplate(name, fn){
-		_.ajax.get('/api/'+ name, null, function(text){
-			fn(text);
-		});
-	}
-
-	var xmeet = {
-		GroupChat: function(){
-			var groupChat = new GroupChat();
-		}
-	};
-
-	window.XMeet = xmeet;
-})(window);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function GroupChatWindow(roomId, self){
+window.SocketChat = SocketChat;function GroupChatWindow(roomId, roomName, self) {
 	this._eventsListener = {};
 	this.roomId = roomId;
+	this.roomName = roomName;
 	this.self = self;
 	this.init();
 }
 
 
-GroupChatWindow.prototype.init = function(){
+GroupChatWindow.prototype.init = function () {
 	var me = this;
-	
-	var tpl = "<div class=\"xmeet-chat-window\">\n	<div class=\"window-title\">\n		<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n		<span class=\"title\">交流群</span>\n		<span class=\"setting\"></span>\n	</div>\n	<div id=\"\" class=\"window-body chat-messages\">\n		<div class=\"chat-messages-list\"></div>\n	</div>\n\n	<div class=\"chat-input-bar\">\n		<div class=\"chat-info-container\">\n		</div>\n		<div class=\"chat-effect-container\">\n			<div class=\"chat-effect-bar\"></div>\n		</div>\n		<div class=\"chat-input-wrapper\">\n			<button class=\"chat-input-tool\">\n				<i class=\"icon-emotion\"></i>\n			</button>\n			<div class=\"chat-input\" contenteditable=\"true\"></div>\n			<button class=\"chat-send\">\n				<i class=\"icon-send\" style=\"transform: translate3d(0px, 0px, 0px);\"></i>\n			</button>\n		</div>\n	</div>\n\n	<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\">\n	  <defs>\n	    <filter id=\"goo\">\n			<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"10\" result=\"blur\"></feGaussianBlur>\n			<feColorMatrix in=\"blur\" mode=\"matrix\" values=\"1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9\" result=\"goo\"></feColorMatrix>\n			<feComposite in=\"SourceGraphic\" in2=\"goo\"></feComposite>\n	    </filter>\n	  </defs>\n	</svg>\n</div>";
+
+	var tpl = "<div class=\"xmeet-chat-window\">\n	<div class=\"window-title\">\n		<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n		<span class=\"title\"></span>\n		<span class=\"setting\"></span>\n		<span class=\"userList\"></span>\n		<span class=\"exit\"></span>\n	</div>\n	<div class=\"window-body chat-messages\">\n		<div class=\"setting-panel\">\n			昵称：<input class=\"nickName\" type=\"text\"/>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"userList-panel\">\n			<ul class=\"users\">\n			</ul>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"chat-messages-list\"></div>\n	</div>\n\n	<div class=\"chat-input-bar\">\n		<div class=\"chat-info-container\">\n		</div>\n		<div class=\"chat-effect-container\">\n			<div class=\"chat-effect-bar\"></div>\n		</div>\n		<div class=\"chat-input-wrapper\">\n			<button class=\"chat-input-tool\">\n				<i class=\"icon-emotion\"></i>\n			</button>\n			<div class=\"chat-input\" contenteditable=\"true\"></div>\n			<button class=\"chat-send\">\n				<i class=\"icon-send\" style=\"transform: translate3d(0px, 0px, 0px);\"></i>\n			</button>\n		</div>\n	</div>\n\n	<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\">\n	  <defs>\n	    <filter id=\"goo\">\n			<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"10\" result=\"blur\"></feGaussianBlur>\n			<feColorMatrix in=\"blur\" mode=\"matrix\" values=\"1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9\" result=\"goo\"></feColorMatrix>\n			<feComposite in=\"SourceGraphic\" in2=\"goo\"></feComposite>\n	    </filter>\n	  </defs>\n	</svg>\n</div>";
 	var nodes = _.dom.create(tpl);
 	document.body.appendChild(nodes[0]);
+	me.node = nodes[0];
 
-	_.dom.on('.chat-send', 'click', function(e){
+	_.dom.get('.xmeet-chat-window .title')[0].innerHTML = me.roomName;
+	_.dom.get('.setting-panel .nickName')[0].value = me.self.name;
+
+	_.dom.on('.window-title .exit', 'click', function (e) {
+		me.hide();
+	});
+
+	_.dom.on('.chat-send', 'click', function (e) {
 		me.sendMessage();
 	});
 
-	_.dom.on('.chat-input', 'keydown', function(e){
-		if(e.which == 13){
+	_.dom.on('.chat-input', 'keydown', function (e) {
+		if (e.which == 13) {
 			me.sendMessage();
 			e.stopPropagation();
 			e.preventDefault();
 		}
-		me.startTyping();
+		// me.startTyping();
+	});
+
+	_.dom.on('.nickName', 'change', function (e) {
+		if (e.target.value) {
+			me.self.name = e.target.value;
+		}
+	});
+
+	var setPanel = _.dom.get('.setting-panel')[0];
+	var userPanel = _.dom.get('.userList-panel')[0];
+	var setIcon = _.dom.get('.window-title .setting')[0];
+	var userIcon = _.dom.get('.window-title .userList')[0];
+	var setClose = _.dom.get('.setting-panel .close')[0];
+	var userClose = _.dom.get('.userList-panel .close')[0];
+
+	_.dom.on(setIcon, 'click', function (e) {
+		if (!me.settingPanelShow) {
+			TweenMax.to(
+				setPanel, 0.6, {
+					top: 0,
+					ease: Quad.easeInOut,
+					onComplete: function () {
+						me.settingPanelShow = true;
+					}
+				}
+			);
+			_.dom.addClass(setIcon, 'active');
+		}
+		me.usersPanelShow && userClose.click();
+	});
+
+	_.dom.on(userIcon, 'click', function (e) {
+		if (!me.usersPanelShow) {
+			TweenMax.to(
+				userPanel, 0.6, {
+					top: 0,
+					ease: Quad.easeInOut,
+					onComplete: function () {
+						me.usersPanelShow = true;
+					}
+				}
+			);
+			_.dom.addClass(userIcon, 'active');
+		}
+		me.settingPanelShow && setClose.click();
+	});
+
+	_.dom.on(setClose, 'click', function (e) {
+		TweenMax.to(
+			setPanel, 0.6, {
+				top: -120,
+				ease: Quad.easeInOut,
+				onComplete: function () {
+					me.settingPanelShow = false;
+				}
+			}
+		);
+		_.dom.removeClass(setIcon, 'active');
+	});
+
+	_.dom.on(userClose, 'click', function (e) {
+		TweenMax.to(
+			userPanel, 0.6, {
+				top: -320,
+				ease: Quad.easeInOut,
+				onComplete: function () {
+					me.usersPanelShow = false;
+				}
+			}
+		);
+		_.dom.removeClass(userIcon, 'active');
 	});
 };
 
 
-GroupChatWindow.prototype.sendMessage = function(){
+GroupChatWindow.prototype.sendMessage = function () {
 	var me = this;
 	var input = _.dom.get('.chat-input')[0];
 	var message = input.innerHTML;
-	if(message == "") return;
+	if (message == "") return;
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
 	var sendButton = _.dom.get(".chat-send")[0];
 	var messageElements = me.addMessage(message, me.self, me.getTime(), true);
@@ -974,33 +1056,35 @@ GroupChatWindow.prototype.sendMessage = function(){
 	input.innerHTML = '';
 
 	var newInputHeight = 48;
-	var inputHeightDiff = newInputHeight-oldInputHeight;
+	var inputHeightDiff = newInputHeight - oldInputHeight;
 
 	var messageEffect = _.dom.create('<div class="chat-message-effect"></div>')[0];
 	messageEffect.appendChild(messageBubble.cloneNode(true));
 	effectContainer.appendChild(messageEffect);
-	_.dom.css(effectContainer, {left: 0, top: 0});
-	me.setFilter('url(#goo)');
+	_.dom.css(effectContainer, {
+		left: 0,
+		top: 0
+	});
 
 	var messagePos = _.dom.offset(messageBubble);
-	var effectPos =  _.dom.offset(messageEffect);
+	var effectPos = _.dom.offset(messageEffect);
 	var pos = {
 		x: messagePos.left - effectPos.left,
-		y:messagePos.top - effectPos.top
+		y: messagePos.top - effectPos.top
 	}
 
 	var startingScroll = messagesContainer.scrollTop;
 	var curScrollDiff = 0;
 	var effectYTransition;
-	var setEffectYTransition = function(dest, dur, ease){
+	var setEffectYTransition = function (dest, dur, ease) {
 		return TweenMax.to(
 			messageEffect, dur, {
 				y: dest,
 				ease: ease,
-				onUpdate: function(){
+				onUpdate: function () {
 					var curScroll = messagesContainer.scrollTop;
 					var scrollDiff = curScroll - startingScroll;
-					if(scrollDiff > 0){
+					if (scrollDiff > 0) {
 						curScrollDiff += scrollDiff;
 						startingScroll = curScroll;
 
@@ -1020,17 +1104,16 @@ GroupChatWindow.prototype.sendMessage = function(){
 			delay: 0.2,
 			x: pos.x,
 			ease: Quad.easeInOut,
-			onComplete: function(){
-			}
+			onComplete: function () {}
 		}
 	);
 
 	TweenMax.from(
-		messageBubble, 0.2,{
+		messageBubble, 0.2, {
 			delay: 0.65,
 			opacity: 0,
 			ease: Quad.easeInOut,
-			onComplete: function(){
+			onComplete: function () {
 				TweenMax.killTweensOf(messageEffect);
 				effectContainer.removeChild(messageEffect);
 
@@ -1044,13 +1127,13 @@ GroupChatWindow.prototype.sendMessage = function(){
 	);
 }
 
-GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
+GroupChatWindow.prototype.addMessage = function (message, user, time, isSelf) {
 	var me = this;
-	var messagesContainer= _.dom.get(".chat-messages")[0]
+	var messagesContainer = _.dom.get(".chat-messages")[0]
 	var msgList = _.dom.get('.chat-messages-list')[0];
-	
+
 	var messageContainer;
-	if(user.uid != me.self.uid){
+	if (user.uid != me.self.uid) {
 		messageContainer = _.dom.create('<li class="chat-message chat-message-other"></li>')[0];
 	} else {
 		messageContainer = _.dom.create('<li class="chat-message-self chat-message-other"></li>')[0];
@@ -1058,7 +1141,7 @@ GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
 	msgList.appendChild(messageContainer);
 
 	var messageBubble = _.dom.create('<div class="chat-message-bubble"></div>')[0];
-	messageBubble.innerHTML = '<p class="user">'+ user.name +'<i></i>'+ time +'</p><p class="msg">' + message + '</p>';
+	messageBubble.innerHTML = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
 	messageContainer.appendChild(messageBubble);
 
 	var oldScroll = messagesContainer.scrollTop;
@@ -1069,9 +1152,9 @@ GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
 	TweenMax.fromTo(
 		msgList, 0.4, {
 			y: scrollDiff
-		},{
+		}, {
 			y: 0,
-			ease:Quint.easeOut
+			ease: Quint.easeOut
 		}
 	);
 	return {
@@ -1080,71 +1163,78 @@ GroupChatWindow.prototype.addMessage = function(message, user, time, isSelf){
 	};
 };
 
-GroupChatWindow.prototype.receiveMessage = function(message, user, time){
+GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 	var me = this;
-	if(user.uid == me.self.uid) return;
+	if (user.uid == me.self.uid) return;
 	var messageElements = me.addMessage(message, user, time, false),
 		messageContainer = messageElements.container,
 		messageBubble = messageElements.bubble;
 
-	TweenMax.set(messageBubble,{
+	TweenMax.set(messageBubble, {
 		transformOrigin: "60px 50%"
 	});
-	TweenMax.from(messageBubble, 0.4,{
-		scale:0,
-		ease:Back.easeOut
+	TweenMax.from(messageBubble, 0.4, {
+		scale: 0,
+		ease: Back.easeOut
 	});
 	TweenMax.from(messageBubble, 0.4, {
-		x:-100,
-		ease:Quint.easeOut
+		x: -100,
+		ease: Quint.easeOut
 	});
 }
 
 
-GroupChatWindow.prototype.startTyping = function(){
+GroupChatWindow.prototype.startTyping = function () {
 	var me = this;
-	if(me.isTyping) return;
+	if (me.isTyping) return;
 
 	me.isTyping = true;
 	var effectContainer = _.dom.get(".chat-effect-container")[0],
 		infoContainer = _.dom.get(".chat-info-container")[0];
 
-	var dots= _.dom.create('<div class="chat-effect-dots"></div>')[0];
-	_.dom.css(dots, {top: -30, left:10});
+	var dots = _.dom.create('<div class="chat-effect-dots"></div>')[0];
+	_.dom.css(dots, {
+		top: -30,
+		left: 10
+	});
 	effectContainer.appendChild(dots);
 
 	me.setFilter('url(#goo)');
 	for (var i = 0; i < 3; i++) {
-		var dot= _.dom.create('<div class="chat-effect-dot">')[0];
-		_.dom.css(dot, {left: i*20});
+		var dot = _.dom.create('<div class="chat-effect-dot">')[0];
+		_.dom.css(dot, {
+			left: i * 20
+		});
 		dots.appendChild(dot);
 		TweenMax.to(dot, 0.3, {
-			delay: -i*0.1,
-			y:30,
+			delay: -i * 0.1,
+			y: 30,
 			yoyo: true,
 			repeat: -1,
-			ease:Quad.easeInOut
+			ease: Quad.easeInOut
 		});
 	}
 
 	var info = _.dom.create('<div class="chat-info-typing">')[0];
 	info.innerHTML = "正在输入";
-	_.dom.css(info, {transform: "translate3d(0, 30px, 0)" });
+	_.dom.css(info, {
+		transform: "translate3d(0, 30px, 0)"
+	});
 	infoContainer.appendChild(info);
 	TweenMax.to(info, 0.3, {
 		y: 0
 	});
 };
 
-GroupChatWindow.prototype.StoppedTyping = function(){
+GroupChatWindow.prototype.StoppedTyping = function () {
 	var me = this;
-	if(!me.isTyping) return;
+	if (!me.isTyping) return;
 
 	me.isTyping = false;
 	var effectContainer = _.dom.get(".chat-effect-container")[0],
 		infoContainer = _.dom.get(".chat-info-container")[0];
 
-	var dots= _.dom.get(".chat-effect-dots")[0];
+	var dots = _.dom.get(".chat-effect-dots")[0];
 	TweenMax.to(dots, 0.3, {
 		y: 40,
 		ease: Quad.easeIn,
@@ -1154,7 +1244,7 @@ GroupChatWindow.prototype.StoppedTyping = function(){
 	TweenMax.to(info, 0.3, {
 		y: 30,
 		ease: Quad.easeIn,
-		onComplete:function(){
+		onComplete: function () {
 			effectContainer.removeChild(dots);
 			infoContainer.removeChild(info);
 			me.setFilter('none');
@@ -1162,33 +1252,57 @@ GroupChatWindow.prototype.StoppedTyping = function(){
 	});
 };
 
-GroupChatWindow.prototype.setFilter = function(value){
+GroupChatWindow.prototype.updateUsers = function (members) {
+	var me = this;
+	var users = _.dom.get('.userList-panel .users')[0];
+	for (var k in members) {
+		var item = members[k];
+		var u = _.dom.create('<li>' + item.name + '</li>')[0];
+		users.appendChild(u);
+	}
+};
+
+GroupChatWindow.prototype.show = function () {
+	var me = this;
+	me.node.style.display = "block";
+};
+
+GroupChatWindow.prototype.hide = function () {
+	var me = this;
+	me.node.style.display = "none";
+	me.dispatch('hide');
+};
+
+GroupChatWindow.prototype.setFilter = function (value) {
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
-	_.dom.css(effectContainer, {"-webkit-filter": value});
+	_.dom.css(effectContainer, {
+		"-webkit-filter": value
+	});
 };
 
 
-GroupChatWindow.prototype.on = function(eventType, fn){
+GroupChatWindow.prototype.on = function (eventType, fn) {
 	var me = this;
 	me._eventsListener[eventType] = fn;
 };
 
-GroupChatWindow.prototype.dispatch = function(eventType, param){
+GroupChatWindow.prototype.dispatch = function (eventType, param) {
 	var me = this;
 	var fn = me._eventsListener[eventType];
 	fn && fn(param);
 };
 
-GroupChatWindow.prototype.getTime = function(){
+GroupChatWindow.prototype.getTime = function () {
 	var d = new Date();
-	var arr = [], ti = [];
+	var arr = [],
+		ti = [];
 	arr.push(d.getFullYear());
-	arr.push(d.getMonth()+1);
+	arr.push(d.getMonth() + 1);
 	arr.push(d.getDate());
 	ti.push(d.getHours());
 	ti.push(d.getMinutes());
 	ti.push(d.getSeconds());
-	return 	arr.join('-') + ' ' + ti.join(':');
+	return arr.join('-') + ' ' + ti.join(':');
 };
 
 window.GroupChatWindow = GroupChatWindow;
