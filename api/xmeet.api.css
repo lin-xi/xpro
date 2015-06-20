@@ -89,6 +89,7 @@
 	font-size: 16px; 
 	box-shadow: 0 0 10px #666;
 	border-radius: 10px;
+	overflow: hidden;
 }
 .xmeet-chat-window .window-title{
 	padding: 10px;
@@ -102,7 +103,7 @@
 .xmeet-chat-window .window-title .setting{
 	display: inline-block; vertical-align: middle;
 	width: 32px; height:32px; cursor: pointer;
-	background: url(img/cog.png) no-repeat;
+	background: url(http://meet.xpro.im/v2/img/cog.png) no-repeat;
 	background-size: 32px 32px;
 	margin-right: 20px;
 }
@@ -113,7 +114,7 @@
 .xmeet-chat-window .window-title .userList{
 	display: inline-block; vertical-align: middle;
 	width: 32px; height:32px; cursor: pointer;
-	background: url(img/users.png) no-repeat;
+	background: url(http://meet.xpro.im/v2/img/users.png) no-repeat;
 	background-size: 32px 32px;
 }
 .xmeet-chat-window .window-title .userList.active{
@@ -123,7 +124,7 @@
 .xmeet-chat-window .window-title .exit{
 	display: inline-block; vertical-align: middle;
 	width: 26px; height:26px; cursor: pointer;
-	background: url(img/x.png) no-repeat;
+	background: url(http://meet.xpro.im/v2/img/x.png) no-repeat;
 	background-size: 26px 26px;
 	margin-left: 47px;
 }
@@ -202,7 +203,7 @@
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-	background: url(img/happy.png) center center no-repeat;
+	background: url(http://meet.xpro.im/v2/img/happy.png) center center no-repeat;
 	background-size: 24px 24px;
 	margin: 2px;
 	visibility: hidden;
@@ -223,7 +224,7 @@
 	display: inline-block;
 	width: 24px;
 	height: 24px;
-	background: url(img/paper-plane.png) center center no-repeat;
+	background: url(http://meet.xpro.im/v2/img/paper-plane.png) center center no-repeat;
 	background-size: 24px 24px;
 }
 
@@ -253,9 +254,8 @@
 }
 
 .chat-messages {
-	overflow-x: hidden;
-	overflow-y: auto;
 	width: 100%;
+	overflow: hidden;
 	position: relative;
 	border-radius: 2px 2px 0 0;
 	background: #BEE4F9;
@@ -263,7 +263,10 @@
 
 .chat-messages-list {
 	list-style-type: none;
-	margin: 10px;
+	height: 380px;
+	padding: 10px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .chat-message {

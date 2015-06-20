@@ -467,7 +467,7 @@ var Event = {
 
 	GroupChat.prototype.initialize = function () {
 		var me = this;
-		_.loadCss('api/xmeet.api.css');
+		_.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
 
 		var tpl_chat = "<div class=\"xmeet-chat-logo\">\n	<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n</div>\n";
 		var nodes = _.dom.create(tpl_chat);
@@ -942,7 +942,7 @@ window.SocketChat = SocketChat;function GroupChatWindow(roomId, roomName, self) 
 GroupChatWindow.prototype.init = function () {
 	var me = this;
 
-	var tpl = "<div class=\"xmeet-chat-window\">\n	<div class=\"window-title\">\n		<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n		<span class=\"title\"></span>\n		<span class=\"setting\"></span>\n		<span class=\"userList\"></span>\n		<span class=\"exit\"></span>\n	</div>\n	<div class=\"window-body chat-messages\">\n		<div class=\"setting-panel\">\n			昵称：<input class=\"nickName\" type=\"text\"/>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"userList-panel\">\n			<ul class=\"users\">\n			</ul>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"chat-messages-list\"></div>\n	</div>\n\n	<div class=\"chat-input-bar\">\n		<div class=\"chat-info-container\">\n		</div>\n		<div class=\"chat-effect-container\">\n			<div class=\"chat-effect-bar\"></div>\n		</div>\n		<div class=\"chat-input-wrapper\">\n			<button class=\"chat-input-tool\">\n				<i class=\"icon-emotion\"></i>\n			</button>\n			<div class=\"chat-input\" contenteditable=\"true\"></div>\n			<button class=\"chat-send\">\n				<i class=\"icon-send\" style=\"transform: translate3d(0px, 0px, 0px);\"></i>\n			</button>\n		</div>\n	</div>\n\n	<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\">\n	  <defs>\n	    <filter id=\"goo\">\n			<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"10\" result=\"blur\"></feGaussianBlur>\n			<feColorMatrix in=\"blur\" mode=\"matrix\" values=\"1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9\" result=\"goo\"></feColorMatrix>\n			<feComposite in=\"SourceGraphic\" in2=\"goo\"></feComposite>\n	    </filter>\n	  </defs>\n	</svg>\n</div>";
+	var tpl = "<div class=\"xmeet-chat-window\">\n	<div class=\"window-title\">\n		<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n		<span class=\"title\"></span>\n		<span class=\"setting\"></span>\n		<span class=\"userList\"></span>\n		<span class=\"exit\"></span>\n	</div>\n	<div class=\"window-body chat-messages\">\n		<div class=\"setting-panel\">\n			昵称：<input class=\"nickName\" type=\"text\"/>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"userList-panel\">\n			<ul class=\"users\">\n			</ul>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"chat-messages-list\"></div>\n	</div>\n\n	<div class=\"chat-input-bar\">\n		<div class=\"chat-info-container\">\n		</div>\n		<div class=\"chat-effect-container\">\n			<div class=\"chat-effect-bar\"></div>\n		</div>\n		<div class=\"chat-input-wrapper\">\n			<button class=\"chat-input-tool\">\n				<i class=\"icon-emotion\"></i>\n			</button>\n			<div class=\"chat-input\" contenteditable=\"true\"></div>\n			<button class=\"chat-send\">\n				<i class=\"icon-send\" style=\"transform: translate3d(0px, 0px, 0px);\"></i>\n			</button>\n		</div>\n	</div>\n	\n</div>";
 	var nodes = _.dom.create(tpl);
 	document.body.appendChild(nodes[0]);
 	me.node = nodes[0];
@@ -983,7 +983,7 @@ GroupChatWindow.prototype.init = function () {
 	_.dom.on(setIcon, 'click', function (e) {
 		if (!me.settingPanelShow) {
 			TweenMax.to(
-				setPanel, 0.6, {
+				setPanel, 0.4, {
 					top: 0,
 					ease: Quad.easeInOut,
 					onComplete: function () {
@@ -999,7 +999,7 @@ GroupChatWindow.prototype.init = function () {
 	_.dom.on(userIcon, 'click', function (e) {
 		if (!me.usersPanelShow) {
 			TweenMax.to(
-				userPanel, 0.6, {
+				userPanel, 0.4, {
 					top: 0,
 					ease: Quad.easeInOut,
 					onComplete: function () {
@@ -1014,7 +1014,7 @@ GroupChatWindow.prototype.init = function () {
 
 	_.dom.on(setClose, 'click', function (e) {
 		TweenMax.to(
-			setPanel, 0.6, {
+			setPanel, 0.4, {
 				top: -120,
 				ease: Quad.easeInOut,
 				onComplete: function () {
@@ -1027,7 +1027,7 @@ GroupChatWindow.prototype.init = function () {
 
 	_.dom.on(userClose, 'click', function (e) {
 		TweenMax.to(
-			userPanel, 0.6, {
+			userPanel, 0.4, {
 				top: -320,
 				ease: Quad.easeInOut,
 				onComplete: function () {
@@ -1144,10 +1144,10 @@ GroupChatWindow.prototype.addMessage = function (message, user, time, isSelf) {
 	messageBubble.innerHTML = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
 	messageContainer.appendChild(messageBubble);
 
-	var oldScroll = messagesContainer.scrollTop;
-	messagesContainer.scrollTop = 9999999;
+	var oldScroll = msgList.scrollTop;
+	msgList.scrollTop = 9999999;
 
-	var newScroll = messagesContainer.scrollTop;
+	var newScroll = msgList.scrollTop;
 	var scrollDiff = newScroll - oldScroll;
 	TweenMax.fromTo(
 		msgList, 0.4, {

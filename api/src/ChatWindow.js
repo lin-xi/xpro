@@ -51,7 +51,7 @@ GroupChatWindow.prototype.init = function () {
 	_.dom.on(setIcon, 'click', function (e) {
 		if (!me.settingPanelShow) {
 			TweenMax.to(
-				setPanel, 0.6, {
+				setPanel, 0.4, {
 					top: 0,
 					ease: Quad.easeInOut,
 					onComplete: function () {
@@ -67,7 +67,7 @@ GroupChatWindow.prototype.init = function () {
 	_.dom.on(userIcon, 'click', function (e) {
 		if (!me.usersPanelShow) {
 			TweenMax.to(
-				userPanel, 0.6, {
+				userPanel, 0.4, {
 					top: 0,
 					ease: Quad.easeInOut,
 					onComplete: function () {
@@ -82,7 +82,7 @@ GroupChatWindow.prototype.init = function () {
 
 	_.dom.on(setClose, 'click', function (e) {
 		TweenMax.to(
-			setPanel, 0.6, {
+			setPanel, 0.4, {
 				top: -120,
 				ease: Quad.easeInOut,
 				onComplete: function () {
@@ -95,7 +95,7 @@ GroupChatWindow.prototype.init = function () {
 
 	_.dom.on(userClose, 'click', function (e) {
 		TweenMax.to(
-			userPanel, 0.6, {
+			userPanel, 0.4, {
 				top: -320,
 				ease: Quad.easeInOut,
 				onComplete: function () {
@@ -212,10 +212,10 @@ GroupChatWindow.prototype.addMessage = function (message, user, time, isSelf) {
 	messageBubble.innerHTML = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
 	messageContainer.appendChild(messageBubble);
 
-	var oldScroll = messagesContainer.scrollTop;
-	messagesContainer.scrollTop = 9999999;
+	var oldScroll = msgList.scrollTop;
+	msgList.scrollTop = 9999999;
 
-	var newScroll = messagesContainer.scrollTop;
+	var newScroll = msgList.scrollTop;
 	var scrollDiff = newScroll - oldScroll;
 	TweenMax.fromTo(
 		msgList, 0.4, {
