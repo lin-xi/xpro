@@ -69,7 +69,7 @@
 					name: data.content
 				};
 				var u = members[data.from];
-				win && win.receiveNotice(name + '&nbsp;&nbsp;轻轻的来了', u);
+				win && win.receiveNotice(u.name + '&nbsp;&nbsp;轻轻的来了', u);
 				win && win.updateUsers(members);
 			});
 
