@@ -469,7 +469,7 @@ var Event = {
 		var me = this;
 		_.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
 
-		var tpl_chat = "<div class=\"xmeet-chat-logo\">\n	<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n</div>\n";
+		var tpl_chat = "<div class=\"xmeet-chat-logo\">\n	<img width=\"48\" height=\"48\" src=\"http://meet.xpro.im/v2/api/img/chat.png\"/>\n</div>\n";
 		var nodes = _.dom.create(tpl_chat);
 		document.body.appendChild(nodes[0]);
 
@@ -624,28 +624,29 @@ var Event = {
 
 	window.XMeet = xmeet;
 
-
 	//boot
-	var scripts = document.getElementsByTagName('script');
-	for (var i = 0; i < scripts.length; i++) {
-		var s = scripts[i];
-		var src = s.getAttribute('src');
-		if (src && src.indexOf('xmeet.api.js') != -1) {
-			var params = {};
-			var paramsStr = src.split('?');
-			if (paramsStr.length > 0) {
-				var ps = paramsStr[1].split('&');
-				for (var i = 0, len = ps.length; i < len; i++) {
-					var kvs = ps[i].split('=');
-					var k = kvs[0] == 'roomid' ? 'roomId' : kvs[0];
-					k = kvs[0] == 'roomname' ? 'roomName' : kvs[0];
-					params[k] = kvs[1];
+	window.onload = function () {
+		var scripts = document.getElementsByTagName('script');
+		for (var i = 0; i < scripts.length; i++) {
+			var s = scripts[i];
+			var src = s.getAttribute('src');
+			if (src && src.indexOf('xmeet.api.js') != -1) {
+				var params = {};
+				var paramsStr = src.split('?');
+				if (paramsStr.length > 0) {
+					var ps = paramsStr[1].split('&');
+					for (var i = 0, len = ps.length; i < len; i++) {
+						var kvs = ps[i].split('=');
+						var k = kvs[0] == 'roomid' ? 'roomId' : kvs[0];
+						k = kvs[0] == 'roomname' ? 'roomName' : kvs[0];
+						params[k] = kvs[1];
+					}
 				}
+				var roomId = params['roomId'] || _.md5();
+				var roomName = params['roomName'] || '';
+				new XMeet.Chat(roomId, roomName);
+				break;
 			}
-			var roomId = params['roomId'] || _.md5();
-			var roomName = params['roomName'] || '';
-			new XMeet.Chat(roomId, roomName);
-			break;
 		}
 	}
 
