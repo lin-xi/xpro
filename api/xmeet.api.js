@@ -1210,9 +1210,8 @@ GroupChatWindow.prototype.addNotice = function (message, user) {
 GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 	var me = this;
 	if (user.uid == me.self.uid) return;
-	var messageElements = me.addMessage(message, user, time, false);
-	if (!messageElements) return;
-	var messageContainer = messageElements.container,
+	var messageElements = me.addMessage(message, user, time, false),
+		messageContainer = messageElements.container,
 		messageBubble = messageElements.bubble;
 
 	TweenMax.set(messageBubble, {
@@ -1230,8 +1229,9 @@ GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 
 GroupChatWindow.prototype.receiveNotice = function (message, user) {
 	var me = this;
-	var messageElements = me.addNotice(message, user),
-		messageContainer = messageElements.container,
+	var messageElements = me.addNotice(message, user);
+	if (!messageElements) return;
+	var messageContainer = messageElements.container,
 		messageBubble = messageElements.bubble;
 	TweenMax.set(messageBubble, {
 		transformOrigin: "60px 50%"
