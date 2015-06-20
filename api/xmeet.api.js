@@ -467,8 +467,8 @@ var Event = {
 
 	GroupChat.prototype.initialize = function () {
 		var me = this;
-		// _.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
-		_.loadCss('api/xmeet.api.css');
+		_.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
+		// _.loadCss('api/xmeet.api.css');
 
 		var tpl_chat = "<div class=\"xmeet-chat-logo\">\n	<img width=\"48\" height=\"48\" src=\"http://meet.xpro.im/v2/api/img/chat.png\"/>\n</div>\n";
 		var nodes = _.dom.create(tpl_chat);
