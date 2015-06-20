@@ -1,6 +1,6 @@
 <div class="xmeet-chat-window">
 	<div class="window-title">
-		<img width="48" height="48" src="api/img/chat.png"/>
+		<img width="48" height="48" src="http://meet.xpro.im/v2/api/img/chat.png"/>
 		<span class="title"></span>
 		<span class="setting"></span>
 		<span class="userList"></span>

@@ -231,11 +231,44 @@ GroupChatWindow.prototype.addMessage = function (message, user, time, isSelf) {
 	};
 };
 
+GroupChatWindow.prototype.addNotice = function (message, user) {
+	var me = this;
+	if (user.uid == me.self.uid) return;
+	var messagesContainer = _.dom.get(".chat-messages")[0]
+	var msgList = _.dom.get('.chat-messages-list')[0];
+
+	var messageContainer = _.dom.create('<li class="chat-message notice"></li>')[0];
+	msgList.appendChild(messageContainer);
+
+	var messageBubble = _.dom.create('<div class="chat-message-bubble"></div>')[0];
+	messageBubble.innerHTML = '<p class="msg">' + message + '</p>';
+	messageContainer.appendChild(messageBubble);
+
+	var oldScroll = msgList.scrollTop;
+	msgList.scrollTop = 9999999;
+
+	var newScroll = msgList.scrollTop;
+	var scrollDiff = newScroll - oldScroll;
+	TweenMax.fromTo(
+		msgList, 0.4, {
+			y: scrollDiff
+		}, {
+			y: 0,
+			ease: Quint.easeOut
+		}
+	);
+	return {
+		container: messageContainer,
+		bubble: messageBubble
+	};
+};
+
 GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 	var me = this;
 	if (user.uid == me.self.uid) return;
-	var messageElements = me.addMessage(message, user, time, false),
-		messageContainer = messageElements.container,
+	var messageElements = me.addMessage(message, user, time, false);
+	if (!messageElements) return;
+	var messageContainer = messageElements.container,
 		messageBubble = messageElements.bubble;
 
 	TweenMax.set(messageBubble, {
@@ -251,6 +284,23 @@ GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 	});
 }
 
+GroupChatWindow.prototype.receiveNotice = function (message, user) {
+	var me = this;
+	var messageElements = me.addNotice(message, user),
+		messageContainer = messageElements.container,
+		messageBubble = messageElements.bubble;
+	TweenMax.set(messageBubble, {
+		transformOrigin: "60px 50%"
+	});
+	TweenMax.from(messageBubble, 0.4, {
+		scale: 0,
+		ease: Back.easeOut
+	});
+	TweenMax.from(messageBubble, 0.4, {
+		x: -100,
+		ease: Quint.easeOut
+	});
+};
 
 GroupChatWindow.prototype.startTyping = function () {
 	var me = this;
@@ -323,6 +373,7 @@ GroupChatWindow.prototype.StoppedTyping = function () {
 GroupChatWindow.prototype.updateUsers = function (members) {
 	var me = this;
 	var users = _.dom.get('.userList-panel .users')[0];
+	users.innerHTML = '';
 	for (var k in members) {
 		var item = members[k];
 		var u = _.dom.create('<li>' + item.name + '</li>')[0];

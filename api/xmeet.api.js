@@ -467,7 +467,8 @@ var Event = {
 
 	GroupChat.prototype.initialize = function () {
 		var me = this;
-		_.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
+		// _.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
+		_.loadCss('api/xmeet.api.css');
 
 		var tpl_chat = "<div class=\"xmeet-chat-logo\">\n	<img width=\"48\" height=\"48\" src=\"http://meet.xpro.im/v2/api/img/chat.png\"/>\n</div>\n";
 		var nodes = _.dom.create(tpl_chat);
@@ -516,7 +517,7 @@ var Event = {
 						name: u.nickname
 					};
 				}
-				win.updateUsers(members);
+				win && win.updateUsers(members);
 			});
 
 			sock.on('joined', function (data) {
@@ -524,12 +525,22 @@ var Event = {
 					uid: data.from,
 					name: data.content
 				};
+				var u = members[data.from];
+				win && win.receiveNotice(name + '&nbsp;&nbsp;轻轻的来了', u);
+				win && win.updateUsers(members);
+			});
+
+			sock.on('leaved', function (data) {
+				var user = members[data.from];
+				win && win.receiveNotice(user.name + '&nbsp;&nbsp;悄悄的走了', user);
+				delete members[data.from];
+				win && win.updateUsers(members);
 			});
 
 			sock.on('receive', function (data) {
 				var u = members[data.from];
 				if (u) {
-					win.receiveMessage(data.content, u, data.time);
+					win && win.receiveMessage(data.content, u, data.time);
 				}
 			});
 		}
@@ -943,7 +954,7 @@ window.SocketChat = SocketChat;function GroupChatWindow(roomId, roomName, self) 
 GroupChatWindow.prototype.init = function () {
 	var me = this;
 
-	var tpl = "<div class=\"xmeet-chat-window\">\n	<div class=\"window-title\">\n		<img width=\"48\" height=\"48\" src=\"api/img/chat.png\"/>\n		<span class=\"title\"></span>\n		<span class=\"setting\"></span>\n		<span class=\"userList\"></span>\n		<span class=\"exit\"></span>\n	</div>\n	<div class=\"window-body chat-messages\">\n		<div class=\"setting-panel\">\n			昵称：<input class=\"nickName\" type=\"text\"/>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"userList-panel\">\n			<ul class=\"users\">\n			</ul>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"chat-messages-list\"></div>\n	</div>\n\n	<div class=\"chat-input-bar\">\n		<div class=\"chat-info-container\">\n		</div>\n		<div class=\"chat-effect-container\">\n			<div class=\"chat-effect-bar\"></div>\n		</div>\n		<div class=\"chat-input-wrapper\">\n			<button class=\"chat-input-tool\">\n				<i class=\"icon-emotion\"></i>\n			</button>\n			<div class=\"chat-input\" contenteditable=\"true\"></div>\n			<button class=\"chat-send\">\n				<i class=\"icon-send\" style=\"transform: translate3d(0px, 0px, 0px);\"></i>\n			</button>\n		</div>\n	</div>\n	\n</div>";
+	var tpl = "<div class=\"xmeet-chat-window\">\n	<div class=\"window-title\">\n		<img width=\"48\" height=\"48\" src=\"http://meet.xpro.im/v2/api/img/chat.png\"/>\n		<span class=\"title\"></span>\n		<span class=\"setting\"></span>\n		<span class=\"userList\"></span>\n		<span class=\"exit\"></span>\n	</div>\n	<div class=\"window-body chat-messages\">\n		<div class=\"setting-panel\">\n			昵称：<input class=\"nickName\" type=\"text\"/>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"userList-panel\">\n			<ul class=\"users\">\n			</ul>\n			<div class=\"close\">×</div>\n		</div>\n		<div class=\"chat-messages-list\"></div>\n	</div>\n\n	<div class=\"chat-input-bar\">\n		<div class=\"chat-info-container\">\n		</div>\n		<div class=\"chat-effect-container\">\n			<div class=\"chat-effect-bar\"></div>\n		</div>\n		<div class=\"chat-input-wrapper\">\n			<button class=\"chat-input-tool\">\n				<i class=\"icon-emotion\"></i>\n			</button>\n			<div class=\"chat-input\" contenteditable=\"true\"></div>\n			<button class=\"chat-send\">\n				<i class=\"icon-send\" style=\"transform: translate3d(0px, 0px, 0px);\"></i>\n			</button>\n		</div>\n	</div>\n	\n</div>";
 	var nodes = _.dom.create(tpl);
 	document.body.appendChild(nodes[0]);
 	me.node = nodes[0];
@@ -1164,11 +1175,44 @@ GroupChatWindow.prototype.addMessage = function (message, user, time, isSelf) {
 	};
 };
 
+GroupChatWindow.prototype.addNotice = function (message, user) {
+	var me = this;
+	if (user.uid == me.self.uid) return;
+	var messagesContainer = _.dom.get(".chat-messages")[0]
+	var msgList = _.dom.get('.chat-messages-list')[0];
+
+	var messageContainer = _.dom.create('<li class="chat-message notice"></li>')[0];
+	msgList.appendChild(messageContainer);
+
+	var messageBubble = _.dom.create('<div class="chat-message-bubble"></div>')[0];
+	messageBubble.innerHTML = '<p class="msg">' + message + '</p>';
+	messageContainer.appendChild(messageBubble);
+
+	var oldScroll = msgList.scrollTop;
+	msgList.scrollTop = 9999999;
+
+	var newScroll = msgList.scrollTop;
+	var scrollDiff = newScroll - oldScroll;
+	TweenMax.fromTo(
+		msgList, 0.4, {
+			y: scrollDiff
+		}, {
+			y: 0,
+			ease: Quint.easeOut
+		}
+	);
+	return {
+		container: messageContainer,
+		bubble: messageBubble
+	};
+};
+
 GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 	var me = this;
 	if (user.uid == me.self.uid) return;
-	var messageElements = me.addMessage(message, user, time, false),
-		messageContainer = messageElements.container,
+	var messageElements = me.addMessage(message, user, time, false);
+	if (!messageElements) return;
+	var messageContainer = messageElements.container,
 		messageBubble = messageElements.bubble;
 
 	TweenMax.set(messageBubble, {
@@ -1184,6 +1228,23 @@ GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 	});
 }
 
+GroupChatWindow.prototype.receiveNotice = function (message, user) {
+	var me = this;
+	var messageElements = me.addNotice(message, user),
+		messageContainer = messageElements.container,
+		messageBubble = messageElements.bubble;
+	TweenMax.set(messageBubble, {
+		transformOrigin: "60px 50%"
+	});
+	TweenMax.from(messageBubble, 0.4, {
+		scale: 0,
+		ease: Back.easeOut
+	});
+	TweenMax.from(messageBubble, 0.4, {
+		x: -100,
+		ease: Quint.easeOut
+	});
+};
 
 GroupChatWindow.prototype.startTyping = function () {
 	var me = this;
@@ -1256,6 +1317,7 @@ GroupChatWindow.prototype.StoppedTyping = function () {
 GroupChatWindow.prototype.updateUsers = function (members) {
 	var me = this;
 	var users = _.dom.get('.userList-panel .users')[0];
+	users.innerHTML = '';
 	for (var k in members) {
 		var item = members[k];
 		var u = _.dom.create('<li>' + item.name + '</li>')[0];

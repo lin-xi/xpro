@@ -10,7 +10,8 @@
 
 	GroupChat.prototype.initialize = function () {
 		var me = this;
-		_.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
+		// _.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
+		_.loadCss('api/xmeet.api.css');
 
 		var tpl_chat = __inline('./xmeet-chat.tpl');
 		var nodes = _.dom.create(tpl_chat);
@@ -59,7 +60,7 @@
 						name: u.nickname
 					};
 				}
-				win.updateUsers(members);
+				win && win.updateUsers(members);
 			});
 
 			sock.on('joined', function (data) {
@@ -67,12 +68,22 @@
 					uid: data.from,
 					name: data.content
 				};
+				var u = members[data.from];
+				win && win.receiveNotice(name + '&nbsp;&nbsp;轻轻的来了', u);
+				win && win.updateUsers(members);
+			});
+
+			sock.on('leaved', function (data) {
+				var user = members[data.from];
+				win && win.receiveNotice(user.name + '&nbsp;&nbsp;悄悄的走了', user);
+				delete members[data.from];
+				win && win.updateUsers(members);
 			});
 
 			sock.on('receive', function (data) {
 				var u = members[data.from];
 				if (u) {
-					win.receiveMessage(data.content, u, data.time);
+					win && win.receiveMessage(data.content, u, data.time);
 				}
 			});
 		}

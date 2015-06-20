@@ -103,7 +103,7 @@
 .xmeet-chat-window .window-title .setting{
 	display: inline-block; vertical-align: middle;
 	width: 32px; height:32px; cursor: pointer;
-	background: url(http://meet.xpro.im/v2/img/cog.png) no-repeat;
+	background: url(http://meet.xpro.im/v2/api/img/cog.png) no-repeat;
 	background-size: 32px 32px;
 	margin-right: 20px;
 }
@@ -114,7 +114,7 @@
 .xmeet-chat-window .window-title .userList{
 	display: inline-block; vertical-align: middle;
 	width: 32px; height:32px; cursor: pointer;
-	background: url(http://meet.xpro.im/v2/img/users.png) no-repeat;
+	background: url(http://meet.xpro.im/v2/api/img/users.png) no-repeat;
 	background-size: 32px 32px;
 }
 .xmeet-chat-window .window-title .userList.active{
@@ -124,7 +124,7 @@
 .xmeet-chat-window .window-title .exit{
 	display: inline-block; vertical-align: middle;
 	width: 26px; height:26px; cursor: pointer;
-	background: url(http://meet.xpro.im/v2/img/x.png) no-repeat;
+	background: url(http://meet.xpro.im/v2/api/img/x.png) no-repeat;
 	background-size: 26px 26px;
 	margin-left: 47px;
 }
@@ -203,7 +203,7 @@
 	display: inline-block;
 	width: 32px;
 	height: 32px;
-	background: url(http://meet.xpro.im/v2/img/happy.png) center center no-repeat;
+	background: url(http://meet.xpro.im/v2/api/img/happy.png) center center no-repeat;
 	background-size: 24px 24px;
 	margin: 2px;
 	visibility: hidden;
@@ -224,7 +224,7 @@
 	display: inline-block;
 	width: 24px;
 	height: 24px;
-	background: url(http://meet.xpro.im/v2/img/paper-plane.png) center center no-repeat;
+	background: url(http://meet.xpro.im/v2/api/img/paper-plane.png) center center no-repeat;
 	background-size: 24px 24px;
 }
 
@@ -327,6 +327,12 @@
 .chat-message-effect .chat-message-bubble { 
 	color: #222;
 	text-align: left;
+}
+
+.notice .chat-message-bubble .msg{
+	background-color: #A5FFB7;
+	padding: 4px;
+	color: #444;
 }
 
 
