@@ -57,6 +57,9 @@ SocketChat.prototype.parseMessage = function (data) {
 		case 'leave':
 			me.dispatch('leaved', wrapData('leaved'));
 			break;
+		case 'changename':
+			me.dispatch('changeName', wrapData('changeName'));
+			break;
 		case 'normal':
 			me.dispatch('receive', wrapData('receive'));
 			break;

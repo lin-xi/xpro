@@ -80,6 +80,16 @@
 				win && win.updateUsers(members);
 			});
 
+			sock.on('changeName', function (data) {
+				var user = members[data.from];
+				win && win.receiveNotice(user.name + '&nbsp;&nbsp;使用了新名字', user);
+				members[data.from] = {
+					uid: data.from,
+					name: data.content
+				};
+				win && win.updateUsers(members);
+			});
+
 			sock.on('receive', function (data) {
 				var u = members[data.from];
 				if (u) {

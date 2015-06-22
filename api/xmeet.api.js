@@ -537,6 +537,16 @@ var Event = {
 				win && win.updateUsers(members);
 			});
 
+			sock.on('changeName', function (data) {
+				var user = members[data.from];
+				win && win.receiveNotice(user.name + '&nbsp;&nbsp;使用了新名字', user);
+				members[data.from] = {
+					uid: data.from,
+					name: data.content
+				};
+				win && win.updateUsers(members);
+			});
+
 			sock.on('receive', function (data) {
 				var u = members[data.from];
 				if (u) {
@@ -913,6 +923,9 @@ SocketChat.prototype.parseMessage = function (data) {
 		case 'leave':
 			me.dispatch('leaved', wrapData('leaved'));
 			break;
+		case 'changename':
+			me.dispatch('changeName', wrapData('changeName'));
+			break;
 		case 'normal':
 			me.dispatch('receive', wrapData('receive'));
 			break;
@@ -980,6 +993,7 @@ GroupChatWindow.prototype.init = function () {
 	_.dom.on('.nickName', 'change', function (e) {
 		if (e.target.value) {
 			me.self.name = e.target.value;
+			me.sendMessage('@changename:' + me.self.name);
 		}
 	});
 
@@ -1002,6 +1016,8 @@ GroupChatWindow.prototype.init = function () {
 				}
 			);
 			_.dom.addClass(setIcon, 'active');
+		} else {
+			setClose.click();
 		}
 		me.usersPanelShow && userClose.click();
 	});
@@ -1018,6 +1034,8 @@ GroupChatWindow.prototype.init = function () {
 				}
 			);
 			_.dom.addClass(userIcon, 'active');
+		} else {
+			userClose.click();
 		}
 		me.settingPanelShow && setClose.click();
 	});
@@ -1050,10 +1068,10 @@ GroupChatWindow.prototype.init = function () {
 };
 
 
-GroupChatWindow.prototype.sendMessage = function () {
+GroupChatWindow.prototype.sendMessage = function (msg) {
 	var me = this;
 	var input = _.dom.get('.chat-input')[0];
-	var message = input.innerHTML;
+	var message = msg || input.innerHTML;
 	if (message == "") return;
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
 	var sendButton = _.dom.get(".chat-send")[0];
