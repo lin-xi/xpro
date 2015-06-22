@@ -191,7 +191,7 @@
 					var ps = paramsStr[1].split('&');
 					for (var i = 0, len = ps.length; i < len; i++) {
 						var kvs = ps[i].split('=');
-						params[k.toLowerCase()] = kvs[1];
+						params[kvs[0].toLowerCase()] = kvs[1];
 					}
 				}
 				var roomId = params['xnest'] || '';
