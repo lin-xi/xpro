@@ -191,13 +191,11 @@
 					var ps = paramsStr[1].split('&');
 					for (var i = 0, len = ps.length; i < len; i++) {
 						var kvs = ps[i].split('=');
-						var k = kvs[0] == 'roomid' ? 'roomId' : kvs[0];
-						k = kvs[0] == 'roomname' ? 'roomName' : kvs[0];
-						params[k] = kvs[1];
+						params[k.toLowerCase()] = kvs[1];
 					}
 				}
-				var roomId = params['roomId'] || _.md5();
-				var roomName = params['roomName'] || '';
+				var roomId = params['xnest'] || '';
+				var roomName = params['xnest_name'] || '';
 				new XMeet.Chat(roomId, roomName);
 				break;
 			}
