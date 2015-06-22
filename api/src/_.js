@@ -1,12 +1,10 @@
-/*--------------------------------------------------------*/
+/*--------------------------------------------------------*/ ;
 var _uid = 0;
 var _ = function (obj) {};
 //isFunction
-if (typeof (/./) !== 'function') {
-	_.isFunction = function (obj) {
-		return typeof obj === 'function';
-	};
-}
+_.isFunction = function (obj) {
+	return typeof obj === 'function';
+};
 //isObject
 _.isObject = function (obj) {
 	return obj === Object(obj);
