@@ -82,7 +82,7 @@
 
 			sock.on('changeName', function (data) {
 				var user = members[data.from];
-				win && win.receiveNotice(user.name + '&nbsp;&nbsp;使用了新名字', user);
+				win && win.receiveNotice(user.name + '&nbsp;&nbsp;使用了新名字&nbsp;&nbsp;' + data.content, user);
 				members[data.from] = {
 					uid: data.from,
 					name: data.content
