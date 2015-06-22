@@ -20,7 +20,7 @@
 		_.dom.on('.xmeet-chat-logo img', 'click', function (e) {
 			// _.dom.toggle('.xmeet-chat-room');
 			_.dom.hide('.xmeet-chat-logo');
-			var name = me.name = generateName();
+			var name = me.name = _.cookies.getItem('xmeetName') || generateName();
 			if (win) {
 				win.show();
 			} else {
@@ -101,6 +101,10 @@
 
 	GroupChat.prototype.bindChatEvent = function () {
 		win.on('send', function (data) {
+			sock.send(data.message);
+		});
+
+		win.on('changeName', function (data) {
 			sock.send(data.message);
 		});
 

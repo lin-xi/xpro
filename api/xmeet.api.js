@@ -386,6 +386,56 @@ _.dom.toggle = function (target) {
 	dis == 'none' ? _.dom.show(target) : _.dom.hide(target);
 };
 /*--------------------------------------------------------*/
+_.cookies = {
+	getItem: function (sKey) {
+		if (!sKey) {
+			return null;
+		}
+		return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+	},
+	setItem: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+		if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
+			return false;
+		}
+		var sExpires = "";
+		if (vEnd) {
+			switch (vEnd.constructor) {
+				case Number:
+					sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+					break;
+				case String:
+					sExpires = "; expires=" + vEnd;
+					break;
+				case Date:
+					sExpires = "; expires=" + vEnd.toUTCString();
+					break;
+			}
+		}
+		document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+		return true;
+	},
+	removeItem: function (sKey, sPath, sDomain) {
+		if (!this.hasItem(sKey)) {
+			return false;
+		}
+		document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+		return true;
+	},
+	hasItem: function (sKey) {
+		if (!sKey) {
+			return false;
+		}
+		return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+	},
+	keys: function () {
+		var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+		for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) {
+			aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]);
+		}
+		return aKeys;
+	}
+};
+/*--------------------------------------------------------*/
 var DomEvent = {
 	on: function (evtName, element, listener, capture) {
 		var evt = '',
@@ -477,7 +527,7 @@ var Event = {
 		_.dom.on('.xmeet-chat-logo img', 'click', function (e) {
 			// _.dom.toggle('.xmeet-chat-room');
 			_.dom.hide('.xmeet-chat-logo');
-			var name = me.name = generateName();
+			var name = me.name = _.cookies.getItem('xmeetName') || generateName();
 			if (win) {
 				win.show();
 			} else {
@@ -558,6 +608,10 @@ var Event = {
 
 	GroupChat.prototype.bindChatEvent = function () {
 		win.on('send', function (data) {
+			sock.send(data.message);
+		});
+
+		win.on('changeName', function (data) {
 			sock.send(data.message);
 		});
 
@@ -993,7 +1047,11 @@ GroupChatWindow.prototype.init = function () {
 	_.dom.on('.nickName', 'change', function (e) {
 		if (e.target.value) {
 			me.self.name = e.target.value;
-			me.sendMessage('@changename:' + me.self.name);
+			me.dispatch('changeName', {
+				message: '@changename:' + me.self.name,
+				from: me.self
+			});
+			_.cookies.setItem('xmeetName', me.self.name);
 		}
 	});
 
@@ -1068,10 +1126,10 @@ GroupChatWindow.prototype.init = function () {
 };
 
 
-GroupChatWindow.prototype.sendMessage = function (msg) {
+GroupChatWindow.prototype.sendMessage = function () {
 	var me = this;
 	var input = _.dom.get('.chat-input')[0];
-	var message = msg || input.innerHTML;
+	var message = input.innerHTML;
 	if (message == "") return;
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
 	var sendButton = _.dom.get(".chat-send")[0];

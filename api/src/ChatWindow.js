@@ -38,7 +38,11 @@ GroupChatWindow.prototype.init = function () {
 	_.dom.on('.nickName', 'change', function (e) {
 		if (e.target.value) {
 			me.self.name = e.target.value;
-			me.sendMessage('@changename:' + me.self.name);
+			me.dispatch('changeName', {
+				message: '@changename:' + me.self.name,
+				from: me.self
+			});
+			_.cookies.setItem('xmeetName', me.self.name);
 		}
 	});
 
@@ -113,10 +117,10 @@ GroupChatWindow.prototype.init = function () {
 };
 
 
-GroupChatWindow.prototype.sendMessage = function (msg) {
+GroupChatWindow.prototype.sendMessage = function () {
 	var me = this;
 	var input = _.dom.get('.chat-input')[0];
-	var message = msg || input.innerHTML;
+	var message = input.innerHTML;
 	if (message == "") return;
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
 	var sendButton = _.dom.get(".chat-send")[0];
