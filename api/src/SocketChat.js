@@ -22,17 +22,30 @@ SocketChat.prototype.init = function () {
 		wsUrl: 'ws://meet.xpro.im:8080/xgate/websocket/'
 	};
 	var url = config.wsUrl + md5(location.host + me.room.id) + '?nickname=' + me.name;
-	var socket = me.socket = new WebSocket(url);
-	socket.onopen = function (e) {
-		console.log('open');
-	};
-	socket.onmessage = function (e) {
-		me.parseMessage(JSON.parse(e.data));
-	};
-	socket.onerror = function (e) {
-		console.log(e);
-	};
-	socket.onclose = function (e) {};
+	var connectHandler;
+
+	reconnect();
+
+	function bindSocketEvent(sock) {
+		sock.onopen = function (e) {
+			clearTimeout(connectHandler);
+		};
+		sock.onmessage = function (e) {
+			me.parseMessage(JSON.parse(e.data));
+		};
+		sock.onerror = function (e) {
+			console.log(e);
+		};
+		sock.onclose = function (e) {
+			reconnect();
+		};
+	}
+
+	function reconnect() {
+		var socket = me.socket = new WebSocket(url);
+		bindSocketEvent(socket);
+		connectHandler = setTimeout(reconnect, 2000);
+	}
 };
 
 SocketChat.prototype.send = function (messsage) {
