@@ -370,6 +370,7 @@ GroupChatWindow.prototype.show = function () {
 	var me = this;
 	me.node.style.display = "block";
 	me.isShow = true;
+	_.dom.get('.chat-messages-list')[0].scrollTop = 9999999;
 };
 
 GroupChatWindow.prototype.hide = function () {
