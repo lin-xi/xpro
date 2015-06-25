@@ -89,7 +89,7 @@
 				var u = members[data.from];
 				win && win.receiveMessage('notice', u.name + '&nbsp;&nbsp;轻轻的来了', u);
 				win && win.updateUsers(members);
-				!win.isShow && me.startShine();
+				win && !win.isShow && me.startShine();
 			});
 
 			sock.on('leaved', function (data) {
@@ -97,7 +97,7 @@
 				win && win.receiveMessage('notice', user.name + '&nbsp;&nbsp;悄悄的走了', user);
 				delete members[data.from];
 				win && win.updateUsers(members);
-				!win.isShow && me.startShine();
+				win && !win.isShow && me.startShine();
 			});
 
 			sock.on('changeName', function (data) {
@@ -108,12 +108,12 @@
 					name: data.content
 				};
 				win && win.updateUsers(members);
-				!win.isShow && me.startShine();
+				win && !win.isShow && me.startShine();
 			});
 
 			sock.on('history', function (data) {
 				data.content.forEach(function (msg) {
-					var u = members[data.from];
+					var u = members[msg.from];
 					if (!u) {
 						u = {
 							uid: msg.from,
@@ -133,7 +133,7 @@
 				var u = members[data.from];
 				if (u) {
 					win && win.receiveMessage('message', data.content, u, data.time);
-					!win.isShow && me.startShine();
+					win && !win.isShow && me.startShine();
 				}
 			});
 		}
