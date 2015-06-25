@@ -4,6 +4,7 @@ function GroupChatWindow(roomId, roomName, self) {
 	this.roomName = roomName;
 	this.self = self;
 	this.init();
+	this.isShow = true;
 }
 
 
@@ -19,6 +20,7 @@ GroupChatWindow.prototype.init = function () {
 	_.dom.get('.setting-panel .nickName')[0].value = me.self.name;
 
 	_.dom.on('.window-title .exit', 'click', function (e) {
+		me.isShow = false;
 		me.hide();
 	});
 
@@ -393,10 +395,12 @@ GroupChatWindow.prototype.updateUsers = function (members) {
 GroupChatWindow.prototype.show = function () {
 	var me = this;
 	me.node.style.display = "block";
+	me.isShow = true;
 };
 
 GroupChatWindow.prototype.hide = function () {
 	var me = this;
+	me.isShow = false;
 	me.node.style.display = "none";
 	me.dispatch('hide');
 };

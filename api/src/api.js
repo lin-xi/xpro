@@ -19,6 +19,7 @@
 
 		_.dom.on('.xmeet-chat-logo img', 'click', function (e) {
 			// _.dom.toggle('.xmeet-chat-room');
+			me.stopShine();
 			_.dom.hide('.xmeet-chat-logo');
 			var name = me.name = _.cookies.getItem('xmeetName') || generateName();
 			if (win) {
@@ -27,6 +28,8 @@
 				me.createChatWindow(name);
 			}
 		});
+
+		me.startShine();
 
 		// var tpl_room = __inline('./xmeet-room.tpl');
 		// var nodes = _.dom.create(tpl_room);
@@ -37,6 +40,21 @@
 		// 	_.dom.toggle('.xmeet-chat-room');
 		// 	me.createChatWindow(name);
 		// });
+	};
+
+	GroupChat.prototype.startShine = function (name) {
+		var me = this;
+		_.dom.css('.xmeet-chat-logo', 'background', '#32C8F6');
+		setTimeout(function () {
+			_.dom.css('.xmeet-chat-logo', 'background', '#e0e0e0');
+			me.shineTimer && clearTimeout(me.shineTimer);
+			me.shineTimer = setTimeout(function () {
+				me.startShine();
+			}, 500);
+		}, 500);
+	};
+	GroupChat.prototype.stopShine = function (name) {
+		clearTimeout(this.shineTimer);
 	};
 
 	GroupChat.prototype.createChatWindow = function (name) {
@@ -71,6 +89,7 @@
 				var u = members[data.from];
 				win && win.receiveNotice(u.name + '&nbsp;&nbsp;轻轻的来了', u);
 				win && win.updateUsers(members);
+				!win.isShow && me.startShine();
 			});
 
 			sock.on('leaved', function (data) {
@@ -78,6 +97,7 @@
 				win && win.receiveNotice(user.name + '&nbsp;&nbsp;悄悄的走了', user);
 				delete members[data.from];
 				win && win.updateUsers(members);
+				!win.isShow && me.startShine();
 			});
 
 			sock.on('changeName', function (data) {
@@ -88,12 +108,14 @@
 					name: data.content
 				};
 				win && win.updateUsers(members);
+				!win.isShow && me.startShine();
 			});
 
 			sock.on('receive', function (data) {
 				var u = members[data.from];
 				if (u) {
 					win && win.receiveMessage(data.content, u, data.time);
+					!win.isShow && me.startShine();
 				}
 			});
 		}
