@@ -273,7 +273,6 @@
 .chat-message {
 	position: relative;
 	font-size: 0;
-	margin-bottom: 10px;
 }
 
 .chat-message-effect {
@@ -308,25 +307,11 @@
 	cursor: pointer;
 }
 
-.chat-message-self.chat-message-merge-start .chat-message-bubble {
-	border-bottom-right-radius: 0;
-}
 
-.chat-message-self.chat-message-merge-middle .chat-message-bubble {
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-}
-
-.chat-message-self.chat-message-merge-end .chat-message-bubble {
-	border-top-right-radius: 0;
-}
-
-.chat-message-self {
+.message-self {
 	text-align: right;
 }
-
-.chat-message-self .chat-message-bubble,
-.chat-message-effect .chat-message-bubble { 
+.message-self .chat-message-bubble { 
 	color: #222;
 	text-align: left;
 }
@@ -335,6 +320,36 @@
 	background-color: #A5FFB7;
 	padding: 4px;
 	color: #444;
+}
+.notice .chat-message-bubble .msg{
+	background-color: #A5FFB7;
+	padding: 4px;
+	color: #444;
+}
+
+.hsitory-self{
+	text-align: right;
+}
+.hsitory-self .chat-message-bubble { 
+	text-align: left;
+}
+
+.system{
+	text-align: center;
+}
+.system .chat-message-bubble .msg{
+	background: #fff;
+	color: #666;
+}
+.system .chat-message-bubble .msg:after{
+	content: "";
+	position: absolute;
+	left: -95px;
+	top: 18px;
+	width: 300px;
+	height: 0px;
+	border-top: 1px #ccc solid;
+	z-index: -1;
 }
 
 

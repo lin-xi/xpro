@@ -87,14 +87,14 @@
 					name: data.content
 				};
 				var u = members[data.from];
-				win && win.receiveNotice(u.name + '&nbsp;&nbsp;轻轻的来了', u);
+				win && win.receiveMessage('notice', u.name + '&nbsp;&nbsp;轻轻的来了', u);
 				win && win.updateUsers(members);
 				!win.isShow && me.startShine();
 			});
 
 			sock.on('leaved', function (data) {
 				var user = members[data.from];
-				win && win.receiveNotice(user.name + '&nbsp;&nbsp;悄悄的走了', user);
+				win && win.receiveMessage('notice', user.name + '&nbsp;&nbsp;悄悄的走了', user);
 				delete members[data.from];
 				win && win.updateUsers(members);
 				!win.isShow && me.startShine();
@@ -102,7 +102,7 @@
 
 			sock.on('changeName', function (data) {
 				var user = members[data.from];
-				win && win.receiveNotice(user.name + '&nbsp;&nbsp;使用了新名字&nbsp;&nbsp;' + data.content, user);
+				win && win.receiveMessage('notice', user.name + '&nbsp;&nbsp;使用了新名字&nbsp;&nbsp;' + data.content, user);
 				members[data.from] = {
 					uid: data.from,
 					name: data.content
@@ -111,10 +111,28 @@
 				!win.isShow && me.startShine();
 			});
 
+			sock.on('history', function (data) {
+				data.content.forEach(function (msg) {
+					var u = members[data.from];
+					if (!u) {
+						u = {
+							uid: msg.from,
+							name: generateName()
+						}
+					}
+					win && win.receiveMessage('history', msg.payload, u, msg.send_time);
+				});
+				if (data.content.length > 0) {
+					win && win.receiveMessage('system', "以上是历史消息", {
+						uid: ''
+					});
+				}
+			});
+
 			sock.on('receive', function (data) {
 				var u = members[data.from];
 				if (u) {
-					win && win.receiveMessage(data.content, u, data.time);
+					win && win.receiveMessage('message', data.content, u, data.time);
 					!win.isShow && me.startShine();
 				}
 			});

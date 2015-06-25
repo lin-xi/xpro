@@ -487,6 +487,7 @@ uglify.parser = (function () {
         this.col = col + 1;
         this.pos = pos + 1;
         this.stack = new Error().stack;
+        console.error(this.toString());
     };
 
     JS_Parse_Error.prototype.toString = function () {

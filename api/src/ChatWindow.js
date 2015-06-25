@@ -126,7 +126,7 @@ GroupChatWindow.prototype.sendMessage = function () {
 	if (message == "") return;
 	var effectContainer = _.dom.get(".chat-effect-container")[0];
 	var sendButton = _.dom.get(".chat-send")[0];
-	var messageElements = me.addMessage(message, me.self, me.getTime(), true);
+	var messageElements = me.addMessage('message', message, me.self, me.getTime(), true);
 	var messageContainer = messageElements.container;
 	var messagesContainer = _.dom.get(".chat-messages")[0];
 	var messageBubble = messageElements.bubble;
@@ -206,21 +206,45 @@ GroupChatWindow.prototype.sendMessage = function () {
 	);
 }
 
-GroupChatWindow.prototype.addMessage = function (message, user, time, isSelf) {
+GroupChatWindow.prototype.addMessage = function (type, message, user, time, isSelf) {
 	var me = this;
 	var messagesContainer = _.dom.get(".chat-messages")[0]
 	var msgList = _.dom.get('.chat-messages-list')[0];
 
-	var messageContainer;
-	if (user.uid != me.self.uid) {
-		messageContainer = _.dom.create('<li class="chat-message chat-message-other"></li>')[0];
-	} else {
-		messageContainer = _.dom.create('<li class="chat-message-self chat-message-other"></li>')[0];
+	var className = '';
+	var msgTpl = '';
+	switch (type) {
+		case 'message':
+			if (user.uid == me.self.uid) {
+				className = 'message-self';
+			} else {
+				className = 'message-other';
+			}
+			msgTpl = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
+			break;
+		case 'notice':
+			className = 'notice';
+			msgTpl = '<p class="msg">' + message + '</p>'
+			break;
+		case 'history':
+			if (user.uid == me.self.uid) {
+				className = 'hsitory-self';
+			} else {
+				className = 'hsitory-other';
+			}
+			msgTpl = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
+			break;
+		case 'system':
+			className = 'system';
+			msgTpl = '<p class="msg">' + message + '</p>'
+			break;
 	}
+
+	var messageContainer = _.dom.create('<li class="chat-message ' + className + '"></li>')[0];
 	msgList.appendChild(messageContainer);
 
 	var messageBubble = _.dom.create('<div class="chat-message-bubble"></div>')[0];
-	messageBubble.innerHTML = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
+	messageBubble.innerHTML = msgTpl;
 	messageContainer.appendChild(messageBubble);
 
 	var oldScroll = msgList.scrollTop;
@@ -242,42 +266,11 @@ GroupChatWindow.prototype.addMessage = function (message, user, time, isSelf) {
 	};
 };
 
-GroupChatWindow.prototype.addNotice = function (message, user) {
+
+GroupChatWindow.prototype.receiveMessage = function (type, message, user, time) {
 	var me = this;
-	if (user.uid == me.self.uid) return;
-	var messagesContainer = _.dom.get(".chat-messages")[0]
-	var msgList = _.dom.get('.chat-messages-list')[0];
-
-	var messageContainer = _.dom.create('<li class="chat-message notice"></li>')[0];
-	msgList.appendChild(messageContainer);
-
-	var messageBubble = _.dom.create('<div class="chat-message-bubble"></div>')[0];
-	messageBubble.innerHTML = '<p class="msg">' + message + '</p>';
-	messageContainer.appendChild(messageBubble);
-
-	var oldScroll = msgList.scrollTop;
-	msgList.scrollTop = 9999999;
-
-	var newScroll = msgList.scrollTop;
-	var scrollDiff = newScroll - oldScroll;
-	TweenMax.fromTo(
-		msgList, 0.4, {
-			y: scrollDiff
-		}, {
-			y: 0,
-			ease: Quint.easeOut
-		}
-	);
-	return {
-		container: messageContainer,
-		bubble: messageBubble
-	};
-};
-
-GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
-	var me = this;
-	if (user.uid == me.self.uid) return;
-	var messageElements = me.addMessage(message, user, time, false),
+	if (user.uid == me.self.uid && type != 'history') return;
+	var messageElements = me.addMessage(type, message, user, time, false),
 		messageContainer = messageElements.container,
 		messageBubble = messageElements.bubble;
 
@@ -293,25 +286,6 @@ GroupChatWindow.prototype.receiveMessage = function (message, user, time) {
 		ease: Quint.easeOut
 	});
 }
-
-GroupChatWindow.prototype.receiveNotice = function (message, user) {
-	var me = this;
-	var messageElements = me.addNotice(message, user);
-	if (!messageElements) return;
-	var messageContainer = messageElements.container,
-		messageBubble = messageElements.bubble;
-	TweenMax.set(messageBubble, {
-		transformOrigin: "60px 50%"
-	});
-	TweenMax.from(messageBubble, 0.4, {
-		scale: 0,
-		ease: Back.easeOut
-	});
-	TweenMax.from(messageBubble, 0.4, {
-		x: -100,
-		ease: Quint.easeOut
-	});
-};
 
 GroupChatWindow.prototype.startTyping = function () {
 	var me = this;
