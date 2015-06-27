@@ -5,13 +5,14 @@
 	function GroupChat(roomId, roomName) {
 		this.roomId = roomId;
 		this.roomName = roomName;
+		this.msgCount = 0;
 		this.initialize();
 	}
 
 	GroupChat.prototype.initialize = function () {
 		var me = this;
-		_.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
-		// _.loadCss('api/xmeet.api.css');
+		// _.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
+		_.loadCss('api/xmeet.api.css');
 
 		var tpl_chat = __inline('./xmeet-chat.tpl');
 		var nodes = _.dom.create(tpl_chat);
@@ -29,6 +30,7 @@
 			}
 		});
 
+		me.originTitle = document.title;
 		me.startShine();
 
 		// var tpl_room = __inline('./xmeet-room.tpl');
@@ -42,19 +44,41 @@
 		// });
 	};
 
-	GroupChat.prototype.startShine = function (name) {
+	GroupChat.prototype.startShine = function (count) {
 		var me = this;
+		var nos = ['', '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', '⑩+'];
 		_.dom.css('.xmeet-chat-logo', 'background', '#32C8F6');
-		setTimeout(function () {
+		me.shineTimer && clearTimeout(me.shineTimer);
+		me.shineTimer = setTimeout(function () {
 			_.dom.css('.xmeet-chat-logo', 'background', '#e0e0e0');
 			me.shineTimer && clearTimeout(me.shineTimer);
 			me.shineTimer = setTimeout(function () {
 				me.startShine();
 			}, 500);
 		}, 500);
+		if (count) {
+			me.msgCount += 1;
+			me.msgCount > 10 && (me.msgCount = 10);
+			shineTitle();
+		}
+
+		function shineTitle() {
+			document.title = '●' + nos[me.msgCount] + ' ' + me.originTitle;
+			me.titleTimer && clearTimeout(me.titleTimer);
+			me.titleTimer = setTimeout(function () {
+				document.title = '○' + nos[me.msgCount] + ' ' + me.originTitle;
+				me.titleTimer && clearTimeout(me.titleTimer);
+				me.titleTimer = setTimeout(function () {
+					shineTitle();
+				}, 1000);
+			}, 1000);
+		}
 	};
-	GroupChat.prototype.stopShine = function (name) {
-		clearTimeout(this.shineTimer);
+	GroupChat.prototype.stopShine = function () {
+		this.shineTimer && clearTimeout(this.shineTimer);
+		this.titleTimer && clearTimeout(this.titleTimer);
+		document.title = this.originTitle;
+		this.msgCount = 0;
 	};
 
 	GroupChat.prototype.createChatWindow = function (name) {
@@ -89,7 +113,7 @@
 				var u = members[data.from];
 				win && win.receiveMessage('notice', u.name + '&nbsp;&nbsp;轻轻的来了', u);
 				win && win.updateUsers(members);
-				win && !win.isShow && me.startShine();
+				win && !win.isShow && me.startShine(true);
 			});
 
 			sock.on('leaved', function (data) {
@@ -97,7 +121,7 @@
 				win && win.receiveMessage('notice', user.name + '&nbsp;&nbsp;悄悄的走了', user);
 				delete members[data.from];
 				win && win.updateUsers(members);
-				win && !win.isShow && me.startShine();
+				win && !win.isShow && me.startShine(true);
 			});
 
 			sock.on('changeName', function (data) {
@@ -108,7 +132,7 @@
 					name: data.content
 				};
 				win && win.updateUsers(members);
-				win && !win.isShow && me.startShine();
+				win && !win.isShow && me.startShine(true);
 			});
 
 			sock.on('history', function (data) {
@@ -133,7 +157,7 @@
 				var u = members[data.from];
 				if (u) {
 					win && win.receiveMessage('message', data.content, u, data.time);
-					win && !win.isShow && me.startShine();
+					win && !win.isShow && me.startShine(true);
 				}
 			});
 		}

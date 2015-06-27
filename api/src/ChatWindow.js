@@ -44,7 +44,7 @@ GroupChatWindow.prototype.init = function () {
 				message: '@changename:' + me.self.name,
 				from: me.self
 			});
-			_.cookies.setItem('xmeetName', me.self.name);
+			_.cookies.setItem('xmeetName', me.self.name, Infinity);
 		}
 	});
 
