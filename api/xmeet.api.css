@@ -167,6 +167,10 @@
 	box-sizing: border-box;
 	padding: 10px;
 }
+.xmeet-chat-window .userList-panel .users{
+	height: 285px;
+	overflow-y: auto;
+}
 .xmeet-chat-window .userList-panel .close{
 	position: absolute; left: 50%; bottom: -20px;
 	height: 30px; width: 100px; border-radius: 10px;
