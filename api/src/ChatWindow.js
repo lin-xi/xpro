@@ -16,12 +16,20 @@ GroupChatWindow.prototype.init = function () {
 	document.body.appendChild(nodes[0]);
 	me.node = nodes[0];
 
+	setTimeout(function () {
+		me.setupEmotion();
+	}, 2000);
+
 	_.dom.get('.xmeet-chat-window .title')[0].innerHTML = me.roomName;
 	_.dom.get('.setting-panel .nickName')[0].value = me.self.name;
 
 	_.dom.on('.window-title .exit', 'click', function (e) {
 		me.isShow = false;
 		me.hide();
+	});
+
+	_.dom.on('.icon-emotion', 'click', function (e) {
+		_.dom.toggle('.emotion-panel');
 	});
 
 	_.dom.on('.chat-send', 'click', function (e) {
@@ -220,11 +228,11 @@ GroupChatWindow.prototype.addMessage = function (type, message, user, time, isSe
 			} else {
 				className = 'message-other';
 			}
-			msgTpl = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
+			msgTpl = '<p class="user">' + user.name + '<i></i>' + time + '</p><div class="msg">' + message + '</div>';
 			break;
 		case 'notice':
 			className = 'notice';
-			msgTpl = '<p class="msg">' + message + '</p>'
+			msgTpl = '<div class="msg">' + message + '</div>'
 			break;
 		case 'history':
 			if (user.uid == me.self.uid) {
@@ -232,11 +240,11 @@ GroupChatWindow.prototype.addMessage = function (type, message, user, time, isSe
 			} else {
 				className = 'hsitory-other';
 			}
-			msgTpl = '<p class="user">' + user.name + '<i></i>' + time + '</p><p class="msg">' + message + '</p>';
+			msgTpl = '<p class="user">' + user.name + '<i></i>' + time + '</p><div class="msg">' + message + '</div>';
 			break;
 		case 'system':
 			className = 'system';
-			msgTpl = '<p class="msg">' + message + '</p>'
+			msgTpl = '<div class="msg">' + message + '</div>'
 			break;
 	}
 
@@ -410,6 +418,52 @@ GroupChatWindow.prototype.getTime = function () {
 	ti.push(d.getMinutes());
 	ti.push(d.getSeconds());
 	return arr.join('-') + ' ' + ti.join(':');
+};
+
+GroupChatWindow.prototype.setupEmotion = function () {
+	var me = this;
+	var panel = _.dom.get('.emotion-panel')[0];
+	var input = _.dom.get('.chat-input')[0];
+	var ems = [];
+	for (var i = 1; i < 133; i++) {
+		ems.push('<img src="http://meet.xpro.im/v2/api/img/emotion/' + i + '.gif" width="24px" height="24px"/>');
+	}
+	panel.innerHTML = ems.join('');
+	ems.length = 0;
+
+	_.dom.on(panel, 'click', function (e) {
+		var tar = e.target;
+		if (tar.tagName.toLowerCase() == 'img') {
+			input.innerHTML += tar.outerHTML;
+			_.dom.hide(panel);
+			input.focus();
+		}
+	});
+
+	_.dom.on(input, 'focus', function (e) {
+		focusEnd();
+	});
+
+	function focusEnd() {
+		var node = document.createElement('span'),
+			range = null,
+			sel = null;
+
+		input.appendChild(node);
+		if (document.selection) {
+			range = document.body.createTextRange();
+			range.moveToElementText(node);
+			range.select();
+		} else if (window.getSelection) {
+			range = document.createRange();
+			range.selectNode(node);
+			sel = window.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range);
+		}
+		input.removeChild(node);
+	}
+
 };
 
 window.GroupChatWindow = GroupChatWindow;

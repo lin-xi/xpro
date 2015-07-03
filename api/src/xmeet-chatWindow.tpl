@@ -1,4 +1,4 @@
-<div class="xmeet-chat-window">
+<div id="px832kcdw" class="xmeet-chat-window">
 	<div class="window-title">
 		<img width="48" height="48" src="http://meet.xpro.im/v2/api/img/chat.png"/>
 		<span class="title"></span>
@@ -34,6 +34,9 @@
 				<i class="icon-send" style="transform: translate3d(0px, 0px, 0px);"></i>
 			</button>
 		</div>
+	</div>
+
+	<div class="emotion-panel">
 	</div>
 	
 </div>
