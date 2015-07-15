@@ -265,7 +265,7 @@
 			if (src && src.indexOf('xmeet.api.js') != -1) {
 				var params = {};
 				var paramsStr = src.split('?');
-				if (paramsStr.length > 0) {
+				if (paramsStr.length > 1) {
 					var ps = paramsStr[1].split('&');
 					for (var i = 0, len = ps.length; i < len; i++) {
 						var kvs = ps[i].split('=');
