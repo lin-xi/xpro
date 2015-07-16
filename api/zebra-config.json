@@ -4,7 +4,7 @@
 	"rules": {
 		"js": {
 			"compile": true,
-			"uglify": false,
+			"uglify": true,
 			"copy": true,
 			"pack": {
 				"xmeet.api.js": [
