@@ -21,7 +21,7 @@ SocketChat.prototype.init = function () {
 	var config = {
 		wsUrl: 'ws://meet.xpro.im:8080/xgate/websocket/'
 	};
-	var url = config.wsUrl + md5(location.host + me.room.id) + '?nickname=' + encodeURI(me.name);
+	var url = config.wsUrl + md5(location.host + me.room.id) + '?nickname=' + encodeURIComponent(me.name);
 	var connectHandler;
 
 	reconnect();
