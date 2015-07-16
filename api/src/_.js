@@ -14,7 +14,7 @@ _.isArray = function (obj) {
 	if (obj.length !== undefined) {
 		return true;
 	} else {
-		return toString.call(obj) == '[object Array]';
+		return Object.toString.call(obj) == '[object Array]';
 	}
 };
 _.isEmptyObject = function (obj) {
