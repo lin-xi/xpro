@@ -144,7 +144,7 @@
 							name: generateName()
 						}
 					}
-					win && win.receiveMessage('history', msg.payload, u, msg.send_time);
+					win && win.receiveMessage('history', new FilterChain(msg.payload).filter('emotionIn'), u, msg.send_time);
 				});
 				if (data.content.length > 0) {
 					win && win.receiveMessage('system', "以上是历史消息", {
@@ -156,7 +156,7 @@
 			sock.on('receive', function (data) {
 				var u = members[data.from];
 				if (u) {
-					win && win.receiveMessage('message', data.content, u, data.time);
+					win && win.receiveMessage('message', new FilterChain(data.content).filter('emotionIn'), u, data.time);
 					win && !win.isShow && me.startShine(true);
 				}
 			});
@@ -165,7 +165,7 @@
 
 	GroupChat.prototype.bindChatEvent = function () {
 		win.on('send', function (data) {
-			sock.send(data.message);
+			sock.send(new FilterChain(data.message).filter('emotionOut'));
 		});
 
 		win.on('changeName', function (data) {

@@ -12,6 +12,7 @@
 					"api.js",
 					"TweenMax.min.js",
 					"md5.js",
+					"FilterChain.js",
 					"SocketChat.js",
 					"ChatWindow.js"
 				]
