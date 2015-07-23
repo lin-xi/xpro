@@ -6,7 +6,11 @@ var Filter = {
 	},
 	emotionIn: function(input){
 		return input.replace(/#(\d+):/g, function(s0, s1){
-			return '<img src="http://meet.xpro.im/v2/api/img/emotion/' + s1 + '.gif" width="24px" height="24px"\>';
+			if(s1-0<133 && s1-0>0){
+				return '<img src="http://meet.xpro.im/v2/api/img/emotion/' + s1 + '.gif" width="24px" height="24px"\>';
+			} else {
+				return s0;
+			}
 		});
 	}
 };
