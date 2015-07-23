@@ -7,13 +7,13 @@
 		<span class="exit"></span>
 	</div>
 	<div class="window-body chat-messages">
-		<div class="setting-panel">
-			昵称：<input class="nickName" type="text"/>
-			<div class="close">×</div>
-		</div>
 		<div class="userList-panel">
 			<ul class="users">
 			</ul>
+			<div class="close">×</div>
+		</div>
+		<div class="setting-panel">
+			昵称：<input class="nickName" type="text"/>
 			<div class="close">×</div>
 		</div>
 		<div class="chat-messages-list"></div>
