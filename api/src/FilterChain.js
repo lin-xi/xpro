@@ -5,7 +5,7 @@ var Filter = {
 		});
 	},
 	emotionIn: function(input){
-		return input.replace(/#(\d+):/, function(s0, s1){
+		return input.replace(/#(\d+):/g, function(s0, s1){
 			return '<img src="http://meet.xpro.im/v2/api/img/emotion/' + s1 + '.gif" width="24px" height="24px"\>';
 		});
 	}
