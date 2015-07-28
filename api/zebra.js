@@ -7,14 +7,10 @@ var config, srcPath, outPath;
 var basePath = process.cwd();
 var folders = [];
 var timeHanlder, watchTimer;
+var packFiles = {};
+var startTime = new Date();
 
 function traverse(path, floor) {
-    if (timeHanlder) {
-        clearTimeout(timeHanlder);
-    }
-    timeHanlder = setTimeout(function () {
-        doPack();
-    }, 1000);
     floor++;
     fs.readdir(path, function (err, files) {
         if (err) {
@@ -115,7 +111,6 @@ function preproccessJs(path) {
         if (rpath.slice(-3) != '.js') {
             rpath += '.js';
         }
-        console.log('>> [', relativeOutPath + rpath, ']');
         return 'require("' + relativeOutPath + rpath + '")';
     });
 
@@ -129,29 +124,60 @@ function preproccessJs(path) {
         return '"' + getFileAsString(rpath) + '"';
     });
 
+    var js = config.rules.js;
+    if (js.uglify) {
+        jsData = doUglify(jsData);
+        console.log('> Uglify [' + path + ']');
+    }
     writeFile(outFile, jsData, 'utf-8');
+    doPack(outFile);
 }
 
-function doPack() {
+function doPack(readyFile) {
+    packFiles[readyFile] = true;
+
     var js = config.rules.js;
     if (js.pack) {
+        var allready = true;
         for (var p in js.pack) {
-            var outFile = outPath + p;
+            var outFile = outPath + '/' + p;
             var files = js.pack[p];
-            var packTemp = [];
-            files.forEach(function (item, idx) {
-                var filePath = outPath + item;
-                packTemp.push(fs.readFileSync(filePath, "utf-8"));
-                fs.unlinkSync(filePath);
+            var notReady = files.some(function (item, idx) {
+                var filePath = outPath + '/' + item;
+                if (!packFiles[filePath]) {
+                    return true;
+                }
             });
-            var outData = packTemp.join(';');
-            if (js.uglify) {
-                outData = doUglify(outData);
+            if (notReady) {
+                allready = false;
             }
-            writeFile(outFile, outData, 'utf-8');
         }
+        if (allready) {
+            for (var p in js.pack) {
+                var outFile = outPath + '/' + p;
+                var files = js.pack[p];
+                var packTemp = [];
+                files.forEach(function (item, idx) {
+                    var filePath = outPath + '/' + item;
+                    packTemp.push(fs.readFileSync(filePath, "utf-8"));
+                    fs.unlinkSync(filePath);
+                });
+                var outData = packTemp.join(';');
+                writeFile(outFile, outData, 'utf-8');
+                console.log('> Pack [' + outFile + ']');
+            }
+            done();
+            doWatch();
+        }
+    } else {
+        if (watchTimer) {
+            clearTimeout(watchTimer);
+        }
+        watchTimer = setTimeout(function () {
+            done();
+            doWatch();
+        }, 3000);
     }
-    doWatch();
 }
 
 function preproccessCss(path) {
@@ -209,11 +235,29 @@ function copyFile(path) {
 }
 
 function setup() {
+    console.log('                                                 ');
+    console.log('                    ,,                           ');
+    console.log('                   *MM                           ');
+    console.log('                    MM                           ');
+    console.log('  M"""MMV  .gP"Ya   MM,dMMb.   `7Mb,od8  ,6"Yb.  ');
+    console.log('     AMV  ,M\'    Yb MM    \`Mb  MM\' \"\'8)      MM  ');
+    console.log('    AMV   8M""""""  MM     M8  MM       ,pm9mMM  ');
+    console.log('   AMV   ,YM.    ,  MM.   ,M9  MM      8M    MM  ');
+    console.log('  AMMmmmM  `Mbmmd\'  P^YbmdP\' .JMML.     `Moo9^Yo.');
+    console.log('=================================================== Version 1.0.8');
+
     getConfig();
     srcPath = relative2absolute(config.base, basePath);
     outPath = relative2absolute(config.output, basePath);
-
+    if (outPath.slice(-1) == '/' || outPath.slice(-1) == '\\') {
+        outPath = outPath.slice(0, -1);
+    }
     traverse(srcPath, 0);
+}
+
+function done() {
+    var time = (new Date() - startTime) / 1000;
+    console.log('[done] ' + time + 's');
 }
 
 function watchDir(path) {
@@ -232,10 +276,13 @@ function watchDir(path) {
 }
 
 function doWatch() {
-    console.log('[watch]...');
-    folders.forEach(function (item, index) {
-        watchDir(item);
-    });
+    var args = process.argv.slice(2);
+    if (args[0] == '-w' && folders.length > 0) {
+        console.log('[watch]...');
+        folders.forEach(function (item, index) {
+            watchDir(item);
+        });
+    }
 }
 
 setup();

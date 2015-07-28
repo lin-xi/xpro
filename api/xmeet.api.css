@@ -10,6 +10,7 @@
 	background: #e0e0e0;
 	font-family: "Microsoft Yahei";
 	-webkit-transition: all 0.5s ease-in-out;
+	z-index: 999999999;
 }
 #uxc3402wg2q.xmeet-chat-logo img{margin-top: 10px;}
 #uxc3402wg2q.xmeet-chat-logo:hover{
@@ -91,6 +92,7 @@
 	box-shadow: 0 0 10px #666;
 	border-radius: 10px;
 	overflow: hidden;
+	z-index: 1000000000;
 }
 #px832kcdw.xmeet-chat-window .window-title{
 	padding: 10px;
