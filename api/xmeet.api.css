@@ -151,13 +151,13 @@
 #px832kcdw.xmeet-chat-window .setting-panel input{
 	height: 30px; width: 300px;
 }
-#px832kcdw.xmeet-chat-window .setting-panel .close{
+#px832kcdw.xmeet-chat-window .setting-panel .close-panel{
 	position: absolute; left: 50%; bottom: -20px;
 	height: 30px; width: 100px; border-radius: 10px;
 	background: #CACACA;   font-size: 24px;
   	color: #888; margin-left: -50px;
 }
-#px832kcdw.xmeet-chat-window .setting-panel .close:hover{
+#px832kcdw.xmeet-chat-window .setting-panel .close-panel:hover{
 	color: #444; cursor: pointer;
 }
 #px832kcdw.xmeet-chat-window .userList-panel{
@@ -173,13 +173,13 @@
 	height: 285px;
 	overflow-y: auto;
 }
-#px832kcdw.xmeet-chat-window .userList-panel .close{
+#px832kcdw.xmeet-chat-window .userList-panel .close-panel{
 	position: absolute; left: 50%; bottom: -20px;
 	height: 30px; width: 100px; border-radius: 10px;
 	background: #CACACA;   font-size: 24px;
   	color: #888; margin-left: -50px; text-align: center;
 }
-#px832kcdw.xmeet-chat-window .userList-panel .close:hover{
+#px832kcdw.xmeet-chat-window .userList-panel .close-panel:hover{
 	color: #444; cursor: pointer;
 }
 #px832kcdw.xmeet-chat-window .userList-panel .users li{

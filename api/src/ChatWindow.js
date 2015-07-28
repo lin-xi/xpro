@@ -60,8 +60,8 @@ GroupChatWindow.prototype.init = function () {
 	var userPanel = _.dom.get('.userList-panel')[0];
 	var setIcon = _.dom.get('.window-title .setting')[0];
 	var userIcon = _.dom.get('.window-title .userList')[0];
-	var setClose = _.dom.get('.setting-panel .close')[0];
-	var userClose = _.dom.get('.userList-panel .close')[0];
+	var setClose = _.dom.get('.setting-panel .close-panel')[0];
+	var userClose = _.dom.get('.userList-panel .close-panel')[0];
 
 	_.dom.on(setIcon, 'click', function (e) {
 		if (!me.settingPanelShow) {

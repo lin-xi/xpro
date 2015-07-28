@@ -10,11 +10,11 @@
 		<div class="userList-panel">
 			<ul class="users">
 			</ul>
-			<div class="close">×</div>
+			<div class="close-panel">×</div>
 		</div>
 		<div class="setting-panel">
 			昵称：<input class="nickName" type="text"/>
-			<div class="close">×</div>
+			<div class="close-panel">×</div>
 		</div>
 		<div class="chat-messages-list"></div>
 	</div>
