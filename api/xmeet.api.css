@@ -108,7 +108,6 @@
 	width: 32px; height:32px; cursor: pointer;
 	background: url(http://meet.xpro.im/v2/api/img/cog.png) no-repeat;
 	background-size: 32px 32px;
-	margin-right: 20px;
 }
 #px832kcdw.xmeet-chat-window .window-title .setting.active{
 	outline: 1px #5D4F5E dashed;
@@ -118,7 +117,7 @@
 	display: inline-block; vertical-align: middle;
 	width: 32px; height:32px; cursor: pointer;
 	background: url(http://meet.xpro.im/v2/api/img/users.png) no-repeat;
-	background-size: 32px 32px;
+	background-size: 32px 32px; margin-right: 20px;
 }
 #px832kcdw.xmeet-chat-window .window-title .userList.active{
 	outline: 1px #5D4F5E dashed;

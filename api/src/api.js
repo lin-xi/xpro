@@ -2,9 +2,10 @@
 
 	var sock, win, members;
 
-	function GroupChat(roomId, roomName) {
+	function GroupChat(roomId, roomName, encryption) {
 		this.roomId = roomId;
 		this.roomName = roomName;
+		this.encryption = encryption;
 		this.msgCount = 0;
 		this.initialize();
 	}
@@ -12,7 +13,7 @@
 	GroupChat.prototype.initialize = function () {
 		var me = this;
 		_.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
-		// _.loadCss('api/xmeet.api.css');
+		//_.loadCss('api/xmeet.api.css');
 
 		var tpl_chat = __inline('./xmeet-chat.tpl');
 		var nodes = _.dom.create(tpl_chat);
@@ -84,7 +85,7 @@
 	GroupChat.prototype.createChatWindow = function (name) {
 		var me = this;
 		if (!sock) {
-			sock = new SocketChat(me.name, me.roomId, me.roomName);
+			sock = new SocketChat(me.name, me.roomId, me.roomName, me.encryption);
 			sock.on('connected', function (data) {
 				win = new GroupChatWindow(data.roomId, me.roomName, {
 					uid: data.from,
@@ -239,7 +240,9 @@
 			'mustang': '木斯唐', //野马
 		};
 		var keys = Object.keys(names);
-		return names[keys[Math.floor(keys.length * Math.random())]];
+		var nn = names[keys[Math.floor(keys.length * Math.random())]];
+		_.cookies.setItem('xmeetName', nn, Infinity);
+		return nn;
 	}
 
 	function getTemplate(name, fn) {
@@ -249,8 +252,8 @@
 	}
 
 	var xmeet = {
-		Chat: function (roomId, roomName) {
-			var groupChat = new GroupChat(roomId, roomName);
+		Chat: function (roomId, roomName, encryption) {
+			var groupChat = new GroupChat(roomId, roomName, encryption);
 		}
 	};
 
@@ -274,7 +277,8 @@
 				}
 				var roomId = params['xnest'] || '';
 				var roomName = params['xnest_name'] || '';
-				new XMeet.Chat(roomId, roomName);
+				var encryption = params['security'] || false;
+				new XMeet.Chat(roomId, roomName, encryption);
 				break;
 			}
 		}

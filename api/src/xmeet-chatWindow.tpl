@@ -2,8 +2,8 @@
 	<div class="window-title">
 		<img width="48" height="48" src="http://meet.xpro.im/v2/api/img/chat.png"/>
 		<span class="title"></span>
-		<span class="setting"></span>
 		<span class="userList"></span>
+		<span class="setting"></span>
 		<span class="exit"></span>
 	</div>
 	<div class="window-body chat-messages">
@@ -13,7 +13,7 @@
 			<div class="close-panel">×</div>
 		</div>
 		<div class="setting-panel">
-			昵称：<input class="nickName" type="text"/>
+			昵称：<input class="nickName" type="text" maxlength="20"/>
 			<div class="close-panel">×</div>
 		</div>
 		<div class="chat-messages-list"></div>

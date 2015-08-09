@@ -1,10 +1,11 @@
-function SocketChat(name, roomId, roomName) {
+function SocketChat(name, roomId, roomName, encryption) {
 	this._eventsListener = {};
 	this.name = name;
 	this.room = {
 		id: roomId,
 		name: roomName
 	};
+	this.encryption = encryption;
 	this.init();
 }
 
@@ -19,9 +20,14 @@ SocketChat.prototype.init = function () {
 	// });
 
 	var config = {
-		wsUrl: 'ws://meet.xpro.im:8080/xgate/websocket/'
+		wsUrl: 'ws://meet.xpro.im:8080/xgate/websocket/',
+		wssUrl: 'wss://meet.xpro.im/xgate/websocket/'
 	};
-	var url = config.wsUrl + md5(location.host + me.room.id) + '?nickname=' + encodeURIComponent(me.name);
+	var serverUrl = config.wsUrl;
+	if(me.encryption){
+		serverUrl = config.wssUrl;
+	}
+	var url = serverUrl + md5(location.host + me.room.id) + '?nickname=' + encodeURIComponent(me.name);
 	var connectHandler;
 
 	reconnect();
@@ -37,14 +43,17 @@ SocketChat.prototype.init = function () {
 			console.log(e);
 		};
 		sock.onclose = function (e) {
-			reconnect();
+			setTimeout(reconnect, 3000)
 		};
 	}
 
 	function reconnect() {
+		if(connectHandler){
+			clearTimeout(connectHandler);
+		}
 		var socket = me.socket = new WebSocket(url);
 		bindSocketEvent(socket);
-		connectHandler = setTimeout(reconnect, 2000);
+		connectHandler = setTimeout(reconnect, 3000);
 	}
 };
 
