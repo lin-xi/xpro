@@ -1,0 +1,22 @@
+{
+	"base": "./src",
+	"output": "./",
+	"rules": {
+		"js": {
+			"compile": true,
+			"uglify": false,
+			"copy": true,
+			"pack": {
+				"xchat.js": [
+					"_.js",
+					"api.js",
+					"TweenMax.min.js",
+					"md5.js",
+					"FilterChain.js",
+					"SocketChat.js",
+					"ChatWindow.js"
+				]
+			}
+		}
+	}
+}
