@@ -260,7 +260,7 @@
 	window.XMeet = xmeet;
 
 	//boot
-	window.onload = function () {
+	window.addEventListener('load', function(){
 		var scripts = document.getElementsByTagName('script');
 		for (var i = 0; i < scripts.length; i++) {
 			var s = scripts[i];
@@ -282,6 +282,6 @@
 				break;
 			}
 		}
-	}
+	});
 
 })(window);
