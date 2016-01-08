@@ -2,9 +2,10 @@
 
 	var sock, win, members;
 
-	function GroupChat(roomId, roomName, encryption) {
+	function GroupChat(roomId, roomName, nickname, encryption) {
 		this.roomId = roomId;
 		this.roomName = roomName;
+		this.nickname = nickname;
 		this.encryption = encryption;
 		this.msgCount = 0;
 		this.initialize();
@@ -23,7 +24,8 @@
 			// _.dom.toggle('.xmeet-chat-room');
 			me.stopShine();
 			_.dom.hide('.xmeet-chat-logo');
-			var name = me.name = _.cookies.getItem('nickname') || generateName();
+			var name = me.name = me.nickname || _.cookies.getItem('nickname') || generateName(false);
+console.log("get cookie : " + _.cookies.getItem('nickname'));
 			if (win) {
 				win.show();
 			} else {
@@ -142,7 +144,7 @@
 					if (!u) {
 						u = {
 							uid: msg.from,
-							name: generateName()
+							name: generateName(false)
 						}
 					}
 					win && win.receiveMessage('history', new FilterChain(msg.payload).filter('emotionIn'), u, msg.send_time);
@@ -178,7 +180,7 @@
 		});
 	};
 
-	function generateName() {
+	function generateName(is_set_cookie) {
 		var names = {
 			'Cat': '凯特',
 			'Dog': '多格',
@@ -241,7 +243,10 @@
 		};
 		var keys = Object.keys(names);
 		var nn = names[keys[Math.floor(keys.length * Math.random())]];
-		_.cookies.setItem('nickname', nn, Infinity);
+		if( is_set_cookie == true ){
+			_.cookies.setItem('nickname', nn, Infinity, "/", "xpro.im");
+			console.log("set cookie" + nn);
+		}
 		return nn;
 	}
 
@@ -252,8 +257,8 @@
 	}
 
 	var xmeet = {
-		Chat: function (roomId, roomName, encryption) {
-			var groupChat = new GroupChat(roomId, roomName, encryption);
+		Chat: function (roomId, roomName, nickname, encryption) {
+			var groupChat = new GroupChat(roomId, roomName, nickname, encryption);
 		}
 	};
 
@@ -266,6 +271,7 @@
 			var s = scripts[i];
 			var src = s.getAttribute('src');
 			if (src && src.indexOf('xmeet.api.js') != -1) {
+			//if (src && src.indexOf('xmeet.test.js') != -1) {
 				var params = {};
 				var paramsStr = src.split('?');
 				if (paramsStr.length > 1) {
@@ -276,9 +282,10 @@
 					}
 				}
 				var roomId = params['xnest'] || '';
+				var nickname= params['nickname'] || false;
 				var roomName = params['xnest_name'] || '';
 				var encryption = params['security'] || false;
-				new XMeet.Chat(roomId, roomName, encryption);
+				new XMeet.Chat(roomId, roomName, nickname, encryption);
 				break;
 			}
 		}
