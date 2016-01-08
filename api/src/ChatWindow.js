@@ -52,7 +52,7 @@ GroupChatWindow.prototype.init = function () {
 				message: '@changename:' + me.self.name,
 				from: me.self
 			});
-			_.cookies.setItem('xmeetName', me.self.name, Infinity);
+			_.cookies.setItem('nickname', me.self.name, Infinity);
 		}
 	});
 

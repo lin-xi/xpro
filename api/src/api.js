@@ -23,7 +23,7 @@
 			// _.dom.toggle('.xmeet-chat-room');
 			me.stopShine();
 			_.dom.hide('.xmeet-chat-logo');
-			var name = me.name = _.cookies.getItem('xmeetName') || generateName();
+			var name = me.name = _.cookies.getItem('nickname') || generateName();
 			if (win) {
 				win.show();
 			} else {
@@ -241,7 +241,7 @@
 		};
 		var keys = Object.keys(names);
 		var nn = names[keys[Math.floor(keys.length * Math.random())]];
-		_.cookies.setItem('xmeetName', nn, Infinity);
+		_.cookies.setItem('nickname', nn, Infinity);
 		return nn;
 	}
 
