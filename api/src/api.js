@@ -270,8 +270,8 @@ console.log("get cookie : " + _.cookies.getItem('nickname'));
 		for (var i = 0; i < scripts.length; i++) {
 			var s = scripts[i];
 			var src = s.getAttribute('src');
-			if (src && src.indexOf('xmeet.api.js') != -1) {
-			//if (src && src.indexOf('xmeet.test.js') != -1) {
+			if (src && src.indexOf('xmeet') != -1) {
+			//if (src && src.indexOf('xmeet.api.js') != -1) {
 				var params = {};
 				var paramsStr = src.split('?');
 				if (paramsStr.length > 1) {
