@@ -13,8 +13,8 @@
 
 	GroupChat.prototype.initialize = function () {
 		var me = this;
+		//_.loadCss('http://meet.xpro.im/v2/api/xmeet.test.css');
 		_.loadCss('http://meet.xpro.im/v2/api/xmeet.api.css');
-		//_.loadCss('api/xmeet.api.css');
 
 		var tpl_chat = __inline('./xmeet-chat.tpl');
 		var nodes = _.dom.create(tpl_chat);
@@ -114,14 +114,14 @@ console.log("get cookie : " + _.cookies.getItem('nickname'));
 					name: data.content
 				};
 				var u = members[data.from];
-				win && win.receiveMessage('notice', u.name + '&nbsp;&nbsp;轻轻的来了', u);
+				win && win.receiveMessage('activity', u.name + '&nbsp;&nbsp;轻轻的来了', u);
 				win && win.updateUsers(members);
 				win && !win.isShow && me.startShine(true);
 			});
 
 			sock.on('leaved', function (data) {
 				var user = members[data.from];
-				win && win.receiveMessage('notice', user.name + '&nbsp;&nbsp;悄悄的走了', user);
+				win && win.receiveMessage('activity', user.name + '&nbsp;&nbsp;悄悄的走了', user);
 				delete members[data.from];
 				win && win.updateUsers(members);
 				win && !win.isShow && me.startShine(true);
@@ -129,7 +129,7 @@ console.log("get cookie : " + _.cookies.getItem('nickname'));
 
 			sock.on('changeName', function (data) {
 				var user = members[data.from];
-				win && win.receiveMessage('notice', user.name + '&nbsp;&nbsp;使用了新名字&nbsp;&nbsp;' + data.content, user);
+				win && win.receiveMessage('activity', user.name + '&nbsp;&nbsp;使用了新名字&nbsp;&nbsp;' + data.content, user);
 				members[data.from] = {
 					uid: data.from,
 					name: data.content

@@ -230,8 +230,8 @@ GroupChatWindow.prototype.addMessage = function (type, message, user, time, isSe
 			}
 			msgTpl = '<p class="user">' + user.name + '<i></i>' + time + '</p><div class="msg">' + message + '</div>';
 			break;
-		case 'notice':
-			className = 'notice';
+		case 'activity':
+			className = 'activity';
 			msgTpl = '<div class="msg">' + message + '</div>'
 			break;
 		case 'history':
