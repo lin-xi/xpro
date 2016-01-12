@@ -21,7 +21,7 @@
 	<meta property="og:description" content="Xmeet为移动应用开发提供用户论坛,用户社区,实时通信提供一站式解决方案，包括：实时聊天、用户论坛、用户社区等服务，让开发者彻底从社区，聊天中解放，专注于提升用户体验，最大限度提升产品发布、迭代周期，在市场上占领先机。">
 	<meta property="og:image" content="https://xmeet.xpro.cn/static/images/logo.png">
 	<meta property="og:image:type" content="image/png">
-
+<script type="text/javascript" src="http://meet.xpro.im/v2/api/xmeet.api.js?nickname=用户想使用的昵称&xnest=yourNameSpace&xnest_name=显示在窗口的标题"></script>
 	<link rel="stylesheet" type="text/css" href="static/css/page.css" />
 </head>
 
@@ -32,11 +32,16 @@
 			<div class="row tc">
 				<span class="col-1"><a href="/"><img src="static/images/logo.png"/></a></span>
 				<span class="col-1"></span>
+
+
+				<span class="col-1">偶遇</span>
+<!-- 
 				<span class="col-1"><a href="/">首页</a></span>
 				<span class="col-1">功能</span>
 				<span class="col-6"></span>
 				<span class="col-1">登录</span>
 				<span class="col-1">注册</span>
+-->
 			</div>
 		</div>
 	</div>
@@ -47,7 +52,7 @@
 
 	<div class="app">
 		<div class="panel what">
-			<h2>什么是Xmeet ?</h2>
+			<h2>什么是偶遇(Xmeet) ?</h2>
 
 			<div class="row tc">
 				<div class="col-4 p30">
@@ -225,22 +230,30 @@
 			<div class="row">
 				<div class="col-3 tc">
 					<span class="platform">
+						<a href="https://github.com/houkinglong/xmeet-ios" target="_blank">
 						<img src="static/images/icon12.png"/>IOS SDK
+						</a>
 					</span>
 				</div>
 				<div class="col-3 tc">
 					<span class="platform">
-						<img src="static/images/icon13.png"/>Android SDK
+						<a href="https://github.com/houkinglong/xmeet-android" target="_blank">
+						<img src="static/images/icon13.png"/>Android
+						</a>
 					</span>
 				</div>
 				<div class="col-3 tc">
 					<span class="platform">
+						<a href="#js" >
 						<img src="static/images/icon14.png"/>即插即用 JS
+						</a>
 					</span>
 				</div>
 				<div class="col-3 tc">
 					<span class="platform">
+						<a href="msg_api.html" target="_blank">
 						<img src="static/images/icon15.png"/>消息 API
+						</a>
 					</span>
 				</div>
 			</div>
@@ -249,6 +262,7 @@
 
 		<div class="panel tc">
 			<h2>教你使用～快来使用吧！</h2>
+			<a href="#js" id="js"></a>
 			<br><br><br>
 			<p>
 				复制这段js在里需要有聊天室的页面上, 每个页面都是独立的空间:
@@ -261,8 +275,7 @@
 				者配置一个聊天空间, 这样就可以让不同的页面共享一个聊天空间xnest:
 			</p>
 			<p class="blue">
-				&lt;script type="text/javascript" src="http://meet.xpro.im/v2/api/xmeet.api.js?xnest=your
-NameSpace&xnest_name=显示在窗口的标题"&gt;&lt;/script&gt;
+				&lt;script type="text/javascript" src="http://meet.xpro.im/v2/api/xmeet.api.js?nickname=用户想使用的昵称&xnest=yourNameSpace&xnest_name=显示在窗口的标题"&gt;&lt;/script&gt;
 			</p>
 			<br><br><br>
 
@@ -270,6 +283,7 @@ NameSpace&xnest_name=显示在窗口的标题"&gt;&lt;/script&gt;
 		
 
 		<div id="cooper" class="panel">
+<!--
 			<h2>合作商家</h2>
 			<div class="row">
 				<div class="col-3 tc">
@@ -285,6 +299,7 @@ NameSpace&xnest_name=显示在窗口的标题"&gt;&lt;/script&gt;
 						<img src="static/images/icon19.png"/>
 				</div>
 			</div>
+-->
 			<br><br>
 		</div>
 
@@ -297,7 +312,7 @@ NameSpace&xnest_name=显示在窗口的标题"&gt;&lt;/script&gt;
 					使用协议
 				</div>
 				<div class="col-2 tc">
-					留言
+					<a href="gift.html" target="_blank" >留言 </a>
 				</div>
 				<div class="col-2 tc">
 					关于我们

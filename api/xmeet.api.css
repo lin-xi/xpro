@@ -309,7 +309,7 @@
 #px832kcdw .chat-message-bubble .user i{
 	padding-right: 10px;
 }
-#px832kcdw .chat-message-bubble .user:hover{
+#px832kcdw .chat-message-bubble .user:hover {
 	color: #888;
 	cursor: pointer;
 }
@@ -322,14 +322,24 @@
 	color: #222;
 	text-align: left;
 }
+#px832kcdw .message-self .chat-message-bubble .msg{
+	background-color: #A5FFB7;
+	padding: 8px;
+	border-radius: 4px;
+	color: #444;
+}
+
+
 
 #px832kcdw .notice .chat-message-bubble .msg{
 	background-color: #A5FFB7;
 	padding: 4px;
 	color: #444;
 }
-#px832kcdw .notice .chat-message-bubble .msg{
-	background-color: #A5FFB7;
+
+#px832kcdw .activity .chat-message-bubble .msg{
+	background-color: #C6E2F4;
+	font-size:12px;
 	padding: 4px;
 	color: #444;
 }
